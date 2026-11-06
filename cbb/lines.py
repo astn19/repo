@@ -81,6 +81,12 @@ def load_lines(path, games, matcher):
     """Return lines merged onto `games` (needs game_id, game_date, home_id, away_id)."""
     L = pd.read_csv(path)
     L.columns = [c.lower().strip() for c in L.columns]
+    keep_cols = ["spread", "total", "spread_open", "total_open", "home_price", "away_price",
+                 "over_price", "under_price"]
+    if "game_id" in L:  # ESPN-sourced lines: exact match, no name matching needed
+        m = L.merge(games[["game_id"]], on="game_id")
+        stats = {"rows": len(L), "matched": len(m), "unmatched_names": pd.Series(dtype=int)}
+        return m[["game_id"] + [c for c in keep_cols if c in m]], stats
     L["date"] = pd.to_datetime(L["date"])
     L["home_tid"] = L["home"].map(matcher)
     L["away_tid"] = L["away"].map(matcher)
