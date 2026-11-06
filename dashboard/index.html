@@ -8,25 +8,17 @@
   .tk-head { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }
   .tk-eyebrow { font-size: var(--cds-font-size-caption); letter-spacing: .08em; text-transform: uppercase; color: var(--color-fg-muted); }
   .tk-head h1 { margin: 0; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: clamp(1.9rem, 4.5vw, 2.6rem); line-height: 1.1; text-wrap: balance; }
-  .tk-status { margin: 4px 0 0; font-size: var(--cds-font-size-body); color: var(--color-fg-muted); max-width: 62ch; line-height: 1.5; }
-  .tk-status b { color: var(--color-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
 
   /* Scoreboard */
-  .tk-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: calc(var(--cds-radius) * 2); overflow: hidden; }
-  .tk-stat { padding: 22px 24px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-  .tk-stat + .tk-stat { border-left: 1px solid var(--color-border-line); }
-  .tk-stat .lbl { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: .04em; text-transform: uppercase; }
-  .tk-stat .big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1; font-variant-numeric: tabular-nums; min-height: 1em; }
+  .tk-sub { margin: 2px 0 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .tk-sub b { color: var(--color-fg); font-weight: 600; }
+  .tk-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .tk-stat { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: calc(var(--cds-radius) * 2); padding: 16px 18px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .tk-stat .lbl { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .tk-stat .big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: clamp(1.6rem, 4.2vw, 2.25rem); line-height: 1.1; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .tk-stat .big.pos { color: var(--color-ok); }
   .tk-stat .big.neg { color: var(--color-bad); }
-  .tk-stat .small { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
-  .tk-stat .small b { color: var(--color-fg); font-weight: 600; }
-  .tk-gauge { height: 34px; margin-top: 4px; }
-  @media (max-width: 720px) {
-    .tk-board { grid-template-columns: 1fr; }
-    .tk-stat + .tk-stat { border-left: 0; border-top: 1px solid var(--color-border-line); }
-    .tk-stat { padding: 18px 20px; }
-  }
+  @media (max-width: 480px) { .tk-board { gap: 8px; } .tk-stat { padding: 12px; } }
 
   /* Section headings */
   .tk-sec { display: flex; flex-direction: column; gap: 14px; }
@@ -35,25 +27,14 @@
   .tk-sec-head .meta { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
   .tk-empty { margin: 0; padding: 22px; text-align: center; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); border: 1px dashed var(--color-border-line); border-radius: calc(var(--cds-radius) * 2); }
 
-  /* Ticket cards */
-  .tk-day { display: flex; flex-direction: column; gap: 10px; }
-  .tk-day + .tk-day { margin-top: 14px; }
-  .tk-day-label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: .04em; text-transform: uppercase; }
-  .tk-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 12px; }
-  .tk-card { --pick: var(--color-fg); position: relative; background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: calc(var(--cds-radius) * 2); padding: 16px 18px 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-  .tk-match { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .tk-match .away, .tk-match .home { font-size: var(--cds-font-size-body); line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .tk-match .at { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
-  .tk-bet { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px dashed var(--color-border-line); }
-  .tk-side { font-family: var(--font-anthropic-serif); font-size: 1.75rem; line-height: 1; color: var(--pick); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .tk-side small { font-family: var(--font-anthropic-sans); font-size: var(--cds-font-size-caption); letter-spacing: .08em; margin-right: 6px; vertical-align: 4px; }
-  .tk-model { text-align: right; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; line-height: 1.4; }
-  .tk-model b { color: var(--color-fg); font-weight: 600; }
-  .tk-conf { display: flex; align-items: center; gap: 10px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
-  .tk-meter { flex: 1; height: 6px; border-radius: 3px; background: var(--cds-chart-grid); overflow: hidden; }
-  .tk-meter i { display: block; height: 100%; border-radius: 3px; background: var(--pick); }
-  .tk-conf b { color: var(--color-fg); font-weight: 600; min-width: 3ch; text-align: right; }
-  .tk-tier { position: absolute; top: 14px; right: 16px; font-size: 11px; color: var(--color-fg-muted); letter-spacing: .04em; text-transform: uppercase; }
+  /* Plays table */
+  .tk-plays td { padding-block: 12px; }
+  .tk-plays .game { font-size: var(--cds-font-size-body); }
+  .tk-pick { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: .04em; color: var(--pick); background: color-mix(in srgb, var(--pick) 14%, transparent); }
+  .tk-confcell { display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end; }
+  .tk-confbar { width: 44px; height: 4px; border-radius: 2px; background: var(--cds-chart-grid); overflow: hidden; }
+  .tk-confbar i { display: block; height: 100%; background: var(--color-fg); opacity: .55; border-radius: 2px; }
+  @media (max-width: 600px) { .tk-confbar { display: none; } .tk-plays .game { font-size: var(--cds-font-size-caption); } }
 
   /* Passes */
   .tk-pass { border: 1px solid var(--color-border-line); border-radius: calc(var(--cds-radius) * 2); background: var(--color-panel); }
@@ -96,44 +77,48 @@
 
   [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
   [data-dash-source-state=empty] { color: transparent; }
-  @media (prefers-reduced-motion: no-preference) {
-    .tk-card { animation: tk-in var(--cds-dur-slow) var(--cds-ease-out) both; }
-    @keyframes tk-in { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-  }
 </style>
 
 <div class="tk">
   <header class="tk-head" id="overview">
     <div class="tk-eyebrow">Paper trading · College basketball totals</div>
     <h1>CBB Totals Tracker</h1>
-    <p class="tk-status" data-state="none" hidden>Picks are logged each morning. Results post the morning after each game, and the record below starts with the first graded day.</p>
-    <p class="tk-status" data-state="some" hidden>After <b data-draw="s-bets" data-source="summary" data-field="graded_plays">—</b> graded plays the model is <b data-draw="s-units" data-source="summary" data-field="units_open">—</b> units, winning <b data-draw="s-win" data-source="summary" data-field="win_pct_open">—</b> of decided bets against a <b data-draw="s-be">—</b> break-even.</p>
+    <p class="tk-sub">Opening totals · model confidence <b data-draw="h-cut">—</b> or higher · <b data-draw="h-unit">—</b> per play</p>
   </header>
 
   <section class="tk-board" id="record" aria-label="Season record">
     <div class="tk-stat">
       <div class="lbl">Record</div>
       <b class="big" data-draw="b-record" data-source="summary" data-field="record">—</b>
-      <div class="small"><b data-draw="b-pending" data-source="summary" data-field="pending_plays">—</b> plays waiting on results</div>
     </div>
     <div class="tk-stat">
-      <div class="lbl">Win rate</div>
+      <div class="lbl">Win %</div>
       <b class="big" data-draw="b-win" data-source="summary" data-field="win_pct_open">—</b>
-      <div class="tk-gauge" data-draw="gauge" data-source="summary"></div>
     </div>
     <div class="tk-stat">
       <div class="lbl">Profit</div>
-      <b class="big" data-draw="b-units" data-source="summary" data-field="units_open">—</b>
-      <div class="small">units vs opening total · <b data-draw="b-uline" data-source="summary" data-field="units_line">—</b> at pick-time lines</div>
+      <b class="big" data-draw="b-usd" data-source="summary" data-field="profit_dollars">—</b>
     </div>
   </section>
 
   <section class="tk-sec" id="plays">
     <div class="tk-sec-head">
       <h2>Today's plays</h2>
-      <span class="meta">1 unit each · locked when logged</span>
+      <span class="meta">Locked when logged each morning</span>
     </div>
-    <div data-draw="plays" data-source="pending"></div>
+    <div class="tk-table-card" data-wrap="plays">
+      <table class="tk-rows tk-plays" data-source="pending" data-row-key="game_id">
+        <thead><tr>
+          <th class="tk-narrow-hide" data-field="date">Date</th>
+          <th data-field="matchup">Game</th>
+          <th data-field="pick">Pick</th>
+          <th class="num" data-field="open_total">Line</th>
+          <th class="num" data-field="model_total">Model</th>
+          <th class="num" data-field="confidence">Conf.</th>
+        </tr></thead>
+        <tbody data-draw="play-rows"></tbody>
+      </table>
+    </div>
     <p class="tk-empty" data-empty="plays" hidden>No plays open right now. New picks appear each morning once lines are posted.</p>
     <details class="tk-pass" id="passes">
       <summary>Other games with lines, where the model passes</summary>
@@ -201,13 +186,13 @@
 
 <script>
   // Fixed references (constants chosen with the user, not data).
-  window.TK = { MIN_PROB: 0.56, BREAKEVEN: 110 / 210, BACKTEST: 0.55 };
+  window.TK = { MIN_PROB: 0.56, BREAKEVEN: 110 / 210, UNIT_DOLLARS: 20 };
   const isPlay = (r) => r.play === true || r.play === 'True' || r.play === 'true';
   window.TK.isPlay = isPlay;
 
   dash.calc('summary', {
     title: 'Record summary',
-    description: 'Wins, losses, pushes and units on plays with a final score, plus plays still waiting on results.',
+    description: 'Wins, losses, pushes, units and dollars ($20 per unit) on plays with a final score, plus plays still waiting.',
     inputs: ['picks'],
     fn: (picks) => {
       const plays = picks.filter((r) => r.play === true || r.play === 'True' || r.play === 'true');
@@ -220,6 +205,7 @@
         win_pct_open: w + l ? w / (w + l) : null,
         units_open: Math.round(sum('units_open') * 100) / 100,
         units_line: Math.round(sum('units_line') * 100) / 100,
+        profit_dollars: Math.round(sum('units_open') * 20 * 100) / 100, // $20 per unit
         pending_plays: plays.filter((r) => r.status === 'pending').length,
       }];
     },
@@ -251,7 +237,7 @@
     fn: (picks) => picks
       .filter((r) => r.status === 'pending' && (r.play === true || r.play === 'True' || r.play === 'true'))
       .map((r) => ({
-        game_id: String(r.game_id), date: r.game_date, away: r.away, home: r.home, tiers: r.tiers, pick: r.pick,
+        game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
         open_total: r.open_total, line_at_pick: r.line_at_pick, model_total: r.model_total, confidence: r.prob,
       }))
       .sort((a, b) => d3.ascending(a.date, b.date) || d3.descending(a.confidence, b.confidence)),
@@ -294,15 +280,11 @@
 
   // Which sentences / empty notes show (onData may set `hidden` outside drawings).
   dash.onData(() => {
-    const s = one('summary');
-    const graded = s ? s.graded_plays : 0;
-    document.querySelectorAll('.tk-status[data-state]').forEach((p) => {
-      p.hidden = dash.data('summary').status !== 'ok' || (p.dataset.state === 'some') !== graded > 0;
-    });
     const empty = (key, show) => document.querySelectorAll(`[data-empty="${key}"]`).forEach((n) => { n.hidden = !show; });
     const wrap = (key, show) => document.querySelectorAll(`[data-wrap="${key}"]`).forEach((n) => { n.hidden = !show; });
     const pend = dash.data('pending'), daily = dash.data('daily'), grad = dash.data('graded'), pas = dash.data('passes');
     empty('plays', pend.status === 'ok' && pend.data.length === 0);
+    wrap('plays', !(pend.status === 'ok' && pend.data.length === 0));
     empty('chart', daily.status === 'ok' && daily.data.length === 0);
     wrap('chart', !(daily.status === 'ok' && daily.data.length === 0));
     empty('results', grad.status === 'ok' && grad.data.length === 0);
@@ -310,92 +292,33 @@
     document.querySelectorAll('#passes').forEach((d) => { d.hidden = pas.status === 'ok' && pas.data.length === 0; });
   });
 
-  dash.draw('s-be', (n) => { n.textContent = pct(window.TK.BREAKEVEN); });
+  const usd = (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + '$' + d3.format(',.2f')(Math.abs(v));
+  dash.draw('h-cut', (n) => { n.textContent = pct0(window.TK.MIN_PROB); });
+  dash.draw('h-unit', (n) => { n.textContent = '$' + window.TK.UNIT_DOLLARS; });
   dash.draw('m-cut', (n) => { n.textContent = pct0(window.TK.MIN_PROB); });
-  dash.draw('s-bets', (n) => { const s = one('summary'); n.textContent = s ? String(s.graded_plays) : '—'; });
-  dash.draw('s-units', (n) => { const s = one('summary'); n.textContent = s ? (s.units_open >= 0 ? 'up ' : 'down ') + d3.format('.2f')(Math.abs(s.units_open)) : '—'; });
-  dash.draw('s-win', (n) => { const s = one('summary'); n.textContent = s && s.win_pct_open != null ? pct(s.win_pct_open) : '—'; });
-
   dash.draw('b-record', (n) => { const s = one('summary'); n.textContent = s ? s.record : '—'; });
-  dash.draw('b-pending', (n) => { const s = one('summary'); n.textContent = s ? String(s.pending_plays) : '—'; });
   dash.draw('b-win', (n) => {
     const s = one('summary');
     if (!s || s.win_pct_open == null) return setBig(n, '—');
     setBig(n, pct(s.win_pct_open), s.win_pct_open > window.TK.BREAKEVEN ? 'pos' : 'neg');
   });
-  dash.draw('b-units', (n) => { const s = one('summary'); if (!s) return setBig(n, '—'); setBig(n, signed(s.units_open), tone(s.units_open)); });
-  dash.draw('b-uline', (n) => { const s = one('summary'); n.textContent = s ? signed(s.units_line) : '—'; });
+  dash.draw('b-usd', (n) => { const s = one('summary'); if (!s) return setBig(n, '—'); setBig(n, usd(s.profit_dollars), tone(s.profit_dollars)); });
 
-  // Win-rate gauge: 45%–65% track, break-even and backtest ticks, current rate as a dot.
-  dash.draw('gauge', (box) => {
-    box.replaceChildren();
-    const s = one('summary');
-    const W = box.clientWidth || 260, H = 34;
-    const x = d3.scaleLinear([0.45, 0.65], [6, W - 6]).clamp(true);
-    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
-    svg.append('rect').attr('x', x(0.45)).attr('y', 8).attr('width', x(0.65) - x(0.45)).attr('height', 6).attr('rx', 3).attr('fill', 'var(--cds-chart-grid)');
-    svg.append('rect').attr('x', x(window.TK.BREAKEVEN)).attr('y', 8).attr('width', x(0.65) - x(window.TK.BREAKEVEN)).attr('height', 6).attr('rx', 3)
-      .attr('fill', 'var(--color-ok)').attr('opacity', 0.18);
-    const ticks = [{ v: window.TK.BREAKEVEN, t: 'break-even ' + pct(window.TK.BREAKEVEN), a: 'end' }, { v: window.TK.BACKTEST, t: 'backtest ' + pct0(window.TK.BACKTEST), a: 'start' }];
-    ticks.forEach((k) => {
-      svg.append('line').attr('x1', x(k.v)).attr('x2', x(k.v)).attr('y1', 4).attr('y2', 18).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-width', 1.5);
-      svg.append('text').attr('x', x(k.v) + (k.a === 'end' ? -4 : 4)).attr('y', 31).attr('text-anchor', k.a)
-        .attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(k.t);
-    });
-    if (s && s.win_pct_open != null) {
-      svg.append('circle').attr('cx', x(s.win_pct_open)).attr('cy', 11).attr('r', 6)
-        .attr('fill', s.win_pct_open > window.TK.BREAKEVEN ? 'var(--color-ok)' : 'var(--color-bad)')
-        .attr('stroke', 'var(--color-panel)').attr('stroke-width', 2);
-    }
-  });
-
-  // Ticket cards, grouped by game date.
-  dash.draw('plays', (box) => {
+  dash.draw('play-rows', (tb) => {
     const g = dash.data('pending');
-    box.replaceChildren();
-    if (g.status !== 'ok' || !g.data.length) return;
-    const days = d3.groups(g.data, (r) => r.date);
-    days.forEach(([date, rows]) => {
-      const day = el('div', 'tk-day');
-      day.appendChild(el('div', 'tk-day-label', `${dayLabel(date)} · ${rows.length} play${rows.length === 1 ? '' : 's'}`));
-      const grid = el('div', 'tk-cards');
-      rows.forEach((r) => {
-        const c = el('article', 'tk-card');
-        c.style.setProperty('--pick', pickColor(r.pick));
-        c.dataset.key = r.game_id;
-        if (r.tiers) c.appendChild(el('span', 'tk-tier', String(r.tiers).replace('low-major', 'low').replace('high-mid', 'mid')));
-        const m = el('div', 'tk-match');
-        m.appendChild(el('div', 'away', r.away));
-        m.appendChild(el('div', 'at', 'at'));
-        m.appendChild(el('div', 'home', r.home));
-        c.appendChild(m);
-        const bet = el('div', 'tk-bet');
-        const side = el('div', 'tk-side');
-        side.appendChild(el('small', null, r.pick));
-        side.appendChild(document.createTextNode(f1(r.open_total)));
-        bet.appendChild(side);
-        const mod = el('div', 'tk-model');
-        const l1 = el('div'); l1.append('Model '); l1.appendChild(el('b', null, f1(r.model_total)));
-        const edge = r.model_total - r.open_total;
-        const l2 = el('div', null, `${edge > 0 ? '+' : '−'}${f1(Math.abs(edge))} vs open`);
-        mod.append(l1, l2);
-        if (r.line_at_pick != null && r.line_at_pick !== r.open_total) mod.appendChild(el('div', null, `Line now ${f1(r.line_at_pick)}`));
-        bet.appendChild(mod);
-        c.appendChild(bet);
-        const conf = el('div', 'tk-conf');
-        conf.appendChild(el('span', null, 'Confidence'));
-        const meter = el('div', 'tk-meter');
-        const fill = el('i');
-        fill.style.width = `${Math.max(0, Math.min(1, (r.confidence - 0.5) / 0.25)) * 100}%`;
-        meter.appendChild(fill);
-        conf.appendChild(meter);
-        conf.appendChild(el('b', null, pct0(r.confidence)));
-        c.appendChild(conf);
-        grid.appendChild(c);
-      });
-      day.appendChild(grid);
-      box.appendChild(day);
-    });
+    const rows = g.status === 'ok' ? g.data : [];
+    tb.replaceChildren(...rows.map((r) => {
+      const tr = el('tr'); tr.dataset.key = r.game_id;
+      tr.appendChild(el('td', 'tk-narrow-hide', shortDay(r.date)));
+      tr.appendChild(el('td', 'game', r.matchup));
+      const pk = el('td'); const chip = el('span', 'tk-pick', r.pick); chip.style.setProperty('--pick', pickColor(r.pick)); pk.appendChild(chip); tr.appendChild(pk);
+      tr.appendChild(el('td', 'num', f1(r.open_total)));
+      tr.appendChild(el('td', 'num', f1(r.model_total)));
+      const c = el('td', 'num'); const wrap = el('span', 'tk-confcell'); const bar = el('span', 'tk-confbar'); const fill = el('i');
+      fill.style.width = `${Math.max(0, Math.min(1, (r.confidence - 0.5) / 0.25)) * 100}%`; bar.appendChild(fill);
+      wrap.append(bar, el('span', null, pct0(r.confidence))); c.appendChild(wrap); tr.appendChild(c);
+      return tr;
+    }));
   });
 
   dash.draw('pass-rows', (tb) => {
