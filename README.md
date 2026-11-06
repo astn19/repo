@@ -65,6 +65,21 @@ non-conference games, and edge size so you can find them.
 
 Tuning was done only on 2011–2016. Treat 2017+ as the clean test period.
 
+## Backtest vs real lines (SportsbookReviewsOnline, 2014–2021, ~34,000 games)
+
+Convert the archive with `python -m cbb.sbr <xlsx files> -o data/lines/sbr_2014_2021.csv`. Team
+names are learned automatically by matching final scores (`cbb.sbr.learn_aliases`).
+
+| Market | Bets (prob ≥ 0.55) | Win % | Note |
+|---|---|---|---|
+| Spreads vs close | 18,767 | 50.8% | **no edge** |
+| Totals vs close | 16,431 | 54.0% | edge, shrinking in recent seasons |
+| Totals vs **open** | 15,283 | **56.8%** | above 55% in every season, 2014–2021 |
+
+Caveats: opening lines carry low limits, SBR data has errors (a sign-convention bug that created a
+fake spread edge was found and fixed), and the most recent season in this data is 2021. The
+totals edge needs to be confirmed on 2022+ lines before you bet real money.
+
 ## How to read a backtest honestly
 
 * Look at the **p-value vs 52.4%**. Fewer than ~1,000 bets at 54% is still within noise.

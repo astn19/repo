@@ -1,1 +1,390 @@
 alias,team_id
+North Carolina,153
+Kentucky,96
+Michigan State,127
+Gonzaga,2250
+Kansas,2305
+Wisconsin,275
+Villanova,222
+Oregon,2483
+Arizona,12
+Duke,150
+Michigan,130
+UCLA,26
+Colorado,38
+USC,30
+Ohio State,194
+Xavier,2752
+Florida,57
+Arkansas,8
+Tennessee,2633
+Creighton,156
+Nevada,2440
+West Virginia,277
+Providence,2507
+Virginia,258
+Alabama,333
+Cal Irvine,300
+California,25
+Stanford,24
+Syracuse,183
+Texas,251
+Wichita State,2724
+Purdue,2509
+Florida State,52
+Mississippi,145
+Seton Hall,2550
+Illinois,356
+Oklahoma,201
+Marquette,269
+San Diego State,21
+BYU,252
+UNLV,2439
+Iowa State,66
+Arizona State,9
+Maryland,120
+Va Commonwealth,2670
+Old Dominion,295
+Loyola Chicago,2350
+Iowa,2294
+Louisville,97
+Dayton,2168
+Connecticut,41
+Butler,2086
+StJohns,2599
+Notre Dame,87
+Kansas State,2306
+LSU,99
+Saint Marys CA,2608
+Georgia,61
+Illinois State,2287
+Oregon State,204
+Western Kentucky,98
+Miami Florida,2390
+Penn State,213
+Auburn,2
+Oakland,2473
+NC State,152
+Vanderbilt,238
+Indiana U,84
+Texas Tech,2641
+Missouri,142
+Oklahoma State,197
+Marshall,276
+Toledo,2649
+TCU,2628
+Bradley,71
+Wyoming,2751
+Rhode Island,227
+Valparaiso,2674
+Nebraska,158
+Cincinnati,2132
+Belmont,2057
+Middle Tenn St,2393
+South Carolina,2579
+Pittsburgh,221
+Georgetown,46
+Wisc Green Bay,2739
+Utah State,328
+Cleveland State,325
+Depaul,305
+Iona,314
+Pepperdine,2492
+Buffalo,2084
+Baylor,239
+Richmond,257
+Illinois Chicago,82
+Washington U,264
+Wisc Milwaukee,270
+Wright State,2750
+Boise State,68
+Northern Iowa,2460
+Northwestern,77
+Davidson,2166
+San Francisco,2539
+StJosephs,2603
+Utah U,254
+Georgia State,2247
+Temple,218
+Fresno State,278
+Clemson,228
+Georgia Tech,59
+Drake,2181
+Tulsa,202
+Washington State,265
+Monmouth,2405
+Manhattan,2363
+Saint Louis,139
+UAB,5
+UT Arlington,250
+Niagara,315
+Memphis U,235
+Colorado State,36
+Evansville,339
+Murray State,93
+Northeastern,111
+Indiana State,282
+StBonaventure,179
+Bowling Green,189
+Kent State,2309
+Morehead State,2413
+Montana,149
+Long Beach State,299
+New Mexico,167
+Akron,2006
+Houston U,248
+Loyola Marymount,2351
+George Mason,2244
+Geo Washington,45
+Mississippi St,344
+Hofstra,2275
+South Florida,58
+Virginia Tech,259
+Rutgers,164
+North Dakota,155
+Louisiana Tech,2348
+La Salle,2325
+Missouri St,2623
+So Illinois,79
+Eastern Illinois,2197
+Miami Ohio,193
+Wofford,2747
+SMU,2567
+Canisius,2099
+Pacific,279
+Wake Forest,154
+Drexel,2182
+Fairfield,2217
+South Alabama,6
+Ohio,195
+Massachusetts,113
+Western Michigan,2711
+Detroit U,2174
+Boston College,103
+IPFW,2870
+StPeter's,2612
+Texas A&M,245
+San Diego,301
+Santa Clara,2541
+Charlotte U,2429
+Ball State,2050
+Austin Peay,2046
+Western Carolina,2717
+Rider,2520
+Montana State,147
+Central Florida,2116
+Siena,2561
+Troy,2653
+Nebraska Omaha,2437
+Youngstown State,2754
+Eastern Kentucky,2198
+IUPUI,85
+Central Michigan,2117
+Southern Miss,2572
+NC Wilmington,350
+Southern Utah,253
+Weber State,2692
+Marist,2368
+Tulane,2655
+Elon,2210
+UL Monroe,2433
+UTEP,2638
+CS Northridge,2463
+San Jose State,23
+UL Lafayette,309
+NoColorado,2458
+North Texas,249
+Cal Poly SLO,13
+Coll Charleston,232
+James Madison,256
+UC Davis,302
+Rice,242
+Air Force,2005
+Portland U,2501
+CS Fullerton,2239
+Texas State,326
+Arkansas State,2032
+Cal Santa Barb,2540
+Eastern Michigan,2199
+Portland State,2502
+Hawaii,62
+SIU Edwardsville,2565
+Georgia Southern,290
+Samford,2535
+No Illinois,2459
+Delaware,48
+Arkansas LR,2031
+Sacramento State,16
+Furman,231
+Tennessee Tech,2635
+Towson,119
+SE Missouri St,2546
+East Carolina,151
+Quinnipiac,2514
+South Dakota,233
+Appalachian St,2026
+Cal Riverside,27
+Fla Atlantic,2226
+Jacksonville St,55
+Fordham,2230
+Denver U,2172
+Tenn Martin,2630
+William&Mary,2729
+Florida Intl,2229
+Tennessee State,2634
+Tex San Antonio,2636
+Oral Roberts,198
+Idaho State,304
+Duquesne,2184
+The Citadel,2643
+E Tennessee St,2193
+EWashington,331
+Western Illinois,2710
+Minnesota U,135
+Idaho U,70
+VMI,2678
+Harvard,108
+Northern Kentucky,94
+Pennsylvania,219
+Coastal Carolina,324
+Princeton,163
+Yale,43
+Cornell,172
+Columbia,171
+Tennessee Chat,236
+Texas Southern,2640
+New Mexico State,166
+South Dakota State,2571
+Vermont,261
+North Dakota State,2449
+Gardner Webb,2241
+Bucknell,2083
+Hampton,2261
+Stony Brook,2619
+Boston U,104
+Robert Morris,2523
+Winthrop,2737
+Fla Gulf Coast,526
+CS Bakersfield,2934
+Holy Cross,107
+Radford,2515
+Sam Houston St,2534
+Norfolk St,2450
+Colgate,2142
+Liberty,2335
+Army,349
+Lipscomb,288
+Coppin State,2154
+North Florida,2454
+NC Asheville,2427
+Grand Canyon,2253
+Southern,2582
+Hartford,42
+Navy,2426
+N Dakota St,2449
+Albany NY,399
+Alabama State,2011
+Longwood,2344
+NJIT,2885
+Long Island,112358
+Stephen FAustin,2617
+StFrancis PA,2598
+High Point,2272
+Wagner,2681
+Prairie View A&M,2504
+USC Upstate,2908
+Campbell,2097
+Ark Pine Bluff,2029
+Mount St Marys,116
+Utah Valley,3084
+Kennesaw St,338
+NC Central,2428
+UMKC,140
+Seattle U,2547
+Lehigh,2329
+South Dakota St,2571
+Texas A&M Corpus,357
+Loyola Maryland,2352
+American,44
+Jackson State,2296
+Presbyterian,2506
+Fair Dickinson,161
+Houston Baptist,2277
+MD Baltimore Co,2378
+Lafayette,322
+Bryant,2803
+Charleston Sou,2127
+Sacred Heart,2529
+Delaware State,2169
+Lamar,2320
+Central Arkansas,2110
+Stetson,56
+Morgan State,2415
+Miss Valley St,2400
+Alcorn State,2016
+Alabama A&M,2010
+Jacksonville,294
+Grambling,2755
+Nicholls State,2447
+New Hampshire,160
+U Mass Lowell,2349
+Howard,47
+Binghamton,2066
+Northwestern St,2466
+NCarolina A&T,2448
+Central Conn,2115
+New Orleans U,2443
+Abilene Christian,2000
+So Carolina St,2569
+MD Eastern Shore,2379
+Maine,311
+Mc Neese State,2377
+Chicago St,2130
+North Alabama,2453
+Florida A&M,50
+Incarnate Word,2916
+California Baptist,2856
+Bethune Cookman,2065
+Minnesota,135
+Merrimack,2771
+Savannah State,2542
+Bellarmine,91
+Chaminade,2124
+Alaska Anchorage,1
+UC San Diego,28
+south Dakota,233
+Memphis,235
+Indiana,84
+Arkansas Little Rock,2031
+East Tenn State,2193
+Fairleigh Dickinson,161
+South Carolina State,2569
+Denver,2172
+Washington,264
+Coll Of Charleston,232
+Mississippi State,344
+Northwestern State,2466
+Northern Illinois,2459
+Central Connecticut,2115
+Eastern Washington,331
+Idaho,70
+MtStMary's,116
+Southern Illinois,79
+Houston,248
+Texas AM,245
+Chicago State,2130
+Mississippi Valley State,2400
+Appalachian State,2026
+UL-Lafayette,309
+George Washington,45
+North Carolina AT,2448
+UL-Monroe,2433
+Texas AM Corpus,357
+Prairie View AM,2504
+SE Missouri State,2546
+TX Pan American,292
+Florida AM,50
+Detroit,2174
+Cal Santa Barbara,2540
+Texas San Antonio,2636
+William Mary,2729
