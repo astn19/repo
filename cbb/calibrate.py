@@ -14,7 +14,7 @@ from sklearn.linear_model import LogisticRegression
 
 from . import config as C
 
-PATH = C.PROCESSED / "total_calibration.json"
+PATH = C.ROOT / "data" / "model" / "total_calibration.json"  # tracked in git
 
 
 def features(ml_total, line):

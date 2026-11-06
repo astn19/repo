@@ -1,0 +1,41 @@
+logged_at,game_id,game_date,away,home,tiers,model_total,open_total,line_at_pick,over_price,under_price,pick,prob,model_spread_home,spread_at_pick,spread_pick,spread_prob,books,play,final_total,result_open,result_line,units_open,units_line,status
+2026-11-05 23:41 ET,401929356,2026-11-06,UT Arlington Mavericks,Portland Pilots,high-mid v low-major,153.3,150.5,150.5,,,OVER,0.526,1.7,-1.5,UT Arlington Mavericks,0.609,1,False,,,,,,pending
+2026-11-05 23:41 ET,401921727,2026-11-06,Oakland Golden Grizzlies,Stanford Cardinal,low-major v power,153.3,150.5,150.5,,,OVER,0.527,-8.4,-14.5,Oakland Golden Grizzlies,0.7,1,False,,,,,,pending
+2026-11-05 23:41 ET,401921061,2026-11-06,North Dakota State Bison,San Francisco Dons,high-mid v low-major,146.0,146.5,146.5,,,UNDER,0.515,-10.7,-9.5,San Francisco Dons,0.541,1,False,,,,,,pending
+2026-11-05 23:41 ET,401920344,2026-11-06,California Baptist Lancers,Oregon State Beavers,low-major v power,143.3,153.5,156.5,,,UNDER,0.644,-10.6,-18.5,California Baptist Lancers,0.752,1,True,,,,,,pending
+2026-11-05 23:41 ET,401917515,2026-11-06,Tarleton State Texans,San Diego Toreros,high-mid v low-major,147.4,150.5,148.5,,,UNDER,0.552,-4.3,-5.5,Tarleton State Texans,0.541,1,False,,,,,,pending
+2026-11-05 23:41 ET,401909785,2026-11-06,Middle Tennessee Blue Raiders,Kansas Jayhawks,low-major v power,152.7,150.5,153.5,,,OVER,0.518,-19.5,-29.5,Middle Tennessee Blue Raiders,0.806,1,False,,,,,,pending
+2026-11-05 23:41 ET,401921739,2026-11-06,Omaha Mavericks,BYU Cougars,low-major v power,154.6,160.5,160.5,,,UNDER,0.594,-30.5,-31.5,Omaha Mavericks,0.533,1,True,,,,,,pending
+2026-11-05 23:41 ET,401922261,2026-11-06,Idaho Vandals,Colorado State Rams,low-major v power,148.6,148.5,151.5,,,UNDER,0.509,-9.9,-16.5,Idaho Vandals,0.716,1,False,,,,,,pending
+2026-11-05 23:41 ET,401921732,2026-11-06,Northern Colorado Bears,Arizona State Sun Devils,low-major v power,156.8,149.5,147.5,,,OVER,0.586,-10.2,-18.5,Northern Colorado Bears,0.764,1,True,,,,,,pending
+2026-11-05 23:41 ET,401909797,2026-11-06,Cal State Northridge Matadors,Kansas State Wildcats,low-major v power,161.9,159.5,162.5,,,OVER,0.516,-9.6,-10.5,Cal State Northridge Matadors,0.532,1,False,,,,,,pending
+2026-11-05 23:41 ET,401922021,2026-11-06,Idaho State Bengals,Wyoming Cowboys,high-mid v low-major,145.3,147.5,148.5,,,UNDER,0.539,-18.6,-18.5,Wyoming Cowboys,0.504,1,False,,,,,,pending
+2026-11-05 23:41 ET,401920952,2026-11-06,Southern Illinois Salukis,Kansas City Roos,high-mid v low-major,140.8,146.5,145.5,,,UNDER,0.584,12.0,2.5,Southern Illinois Salukis,0.794,1,True,,,,,,pending
+2026-11-05 23:41 ET,401920726,2026-11-06,Eastern Illinois Panthers,Iowa Hawkeyes,low-major v power,135.9,137.5,137.5,,,UNDER,0.525,-28.2,-35.5,Eastern Illinois Panthers,0.734,1,False,,,,,,pending
+2026-11-05 23:41 ET,401917914,2026-11-06,Central Arkansas Bears,Ole Miss Rebels,low-major v power,149.7,150.5,152.5,,,UNDER,0.522,-13.4,-19.5,Central Arkansas Bears,0.702,1,False,,,,,,pending
+2026-11-05 23:41 ET,401920685,2026-11-06,UConn Huskies,Michigan Wolverines,power v power,146.0,146.5,144.5,,,UNDER,0.515,-5.9,7.5,Michigan Wolverines,0.876,1,False,,,,,,pending
+2026-11-05 23:41 ET,401909772,2026-11-06,Southern Miss Golden Eagles,Iowa State Cyclones,low-major v power,148.3,148.5,150.5,,,UNDER,0.513,-20.9,-30.5,Southern Miss Golden Eagles,0.795,1,False,,,,,,pending
+2026-11-05 23:41 ET,401928823,2026-11-06,Robert Morris Colonials,UIC Flames,high-mid v low-major,140.7,143.5,143.5,,,UNDER,0.544,-16.6,-10.5,UIC Flames,0.7,1,False,,,,,,pending
+2026-11-05 23:41 ET,401920807,2026-11-06,Northern Kentucky Norse,Texas A&M Aggies,low-major v power,165.9,169.5,170.5,,,UNDER,0.568,-15.1,-26.5,Northern Kentucky Norse,0.838,1,True,,,,,,pending
+2026-11-05 23:41 ET,401920733,2026-11-06,Stony Brook Seawolves,Northwestern Wildcats,low-major v power,143.6,144.5,144.5,,,UNDER,0.52,-13.8,-13.5,Northwestern Wildcats,0.511,1,False,,,,,,pending
+2026-11-05 23:41 ET,401916304,2026-11-06,St. Thomas Tommies,Minnesota Golden Gophers,low-major v power,143.6,146.5,150.5,,,UNDER,0.547,-10.1,-14.5,St. Thomas Tommies,0.647,1,False,,,,,,pending
+2026-11-05 23:41 ET,401909523,2026-11-06,Detroit Mercy Titans,Marquette Golden Eagles,low-major v power,148.7,152.5,155.5,,,UNDER,0.563,-20.6,-32.5,Detroit Mercy Titans,0.848,1,True,,,,,,pending
+2026-11-05 23:41 ET,401906758,2026-11-06,Arkansas State Red Wolves,Alabama Crimson Tide,low-major v power,171.5,173.5,173.5,,,UNDER,0.549,-23.8,-25.5,Arkansas State Red Wolves,0.56,1,False,,,,,,pending
+2026-11-05 23:41 ET,401923260,2026-11-06,Florida Atlantic Owls,Wright State Raiders,high-mid v low-major,155.2,156.5,158.5,,,UNDER,0.532,-5.2,-3.5,Wright State Raiders,0.557,1,False,,,,,,pending
+2026-11-05 23:41 ET,401920894,2026-11-06,Delaware Blue Hens,Wisconsin Badgers,low-major v power,147.5,152.5,152.5,,,UNDER,0.578,-18.6,-24.5,Delaware Blue Hens,0.695,1,True,,,,,,pending
+2026-11-05 23:41 ET,401921802,2026-11-06,James Madison Dukes,Kentucky Wildcats,low-major v power,151.4,158.5,157.5,,,UNDER,0.609,-20.6,-25.5,James Madison Dukes,0.664,1,True,,,,,,pending
+2026-11-05 23:41 ET,401921754,2026-11-06,Yale Bulldogs,UCF Knights,low-major v power,154.5,151.5,152.5,,,OVER,0.529,-5.1,-9.5,Yale Bulldogs,0.648,1,False,,,,,,pending
+2026-11-05 23:41 ET,401921140,2026-11-06,UNC Greensboro Spartans,Elon Phoenix,low-major v low-major,149.4,154.5,154.5,,,UNDER,0.58,-6.8,-9.5,UNC Greensboro Spartans,0.591,1,True,,,,,,pending
+2026-11-05 23:41 ET,401920305,2026-11-06,Georgia Southern Eagles,Georgia Tech Yellow Jackets,low-major v power,155.7,154.5,157.5,,,OVER,0.504,-10.8,-18.5,Georgia Southern Eagles,0.747,1,False,,,,,,pending
+2026-11-05 23:41 ET,401918956,2026-11-06,East Tennessee State Buccaneers,NC State Wolfpack,low-major v power,148.5,152.5,152.5,,,UNDER,0.564,-14.3,-16.5,East Tennessee State Buccaneers,0.576,1,True,,,,,,pending
+2026-11-05 23:41 ET,401917949,2026-11-06,Austin Peay Governors,Kennesaw State Owls,low-major v low-major,160.9,157.5,157.5,,,OVER,0.531,-9.2,-5.5,Kennesaw State Owls,0.627,1,False,,,,,,pending
+2026-11-05 23:41 ET,401913100,2026-11-06,Wofford Terriers,North Carolina Tar Heels,low-major v power,154.7,156.5,156.5,,,UNDER,0.538,-17.3,-22.5,Wofford Terriers,0.673,1,False,,,,,,pending
+2026-11-05 23:41 ET,401911249,2026-11-06,Saint Louis Billikens,Missouri Tigers,high-mid v power,158.0,161.5,161.5,,,UNDER,0.563,-8.0,-2.5,Missouri Tigers,0.682,1,True,,,,,,pending
+2026-11-05 23:41 ET,401911005,2026-11-06,Indiana State Sycamores,Ball State Cardinals,high-mid v low-major,138.7,147.5,147.5,,,UNDER,0.625,-2.0,-2.5,Indiana State Sycamores,0.519,1,True,,,,,,pending
+2026-11-05 23:41 ET,401909695,2026-11-06,Troy Trojans,Florida State Seminoles,low-major v power,156.3,157.5,159.5,,,UNDER,0.53,-19.1,-22.5,Troy Trojans,0.616,1,False,,,,,,pending
+2026-11-05 23:41 ET,401909542,2026-11-06,Eastern Michigan Eagles,Xavier Musketeers,low-major v power,154.5,156.5,156.5,,,UNDER,0.54,-17.6,-23.5,Eastern Michigan Eagles,0.696,1,False,,,,,,pending
+2026-11-05 23:41 ET,401926131,2026-11-06,Valparaiso Beacons,Purdue Boilermakers,high-mid v power,146.1,146.5,146.5,,,UNDER,0.514,-20.8,-19.5,Purdue Boilermakers,0.546,1,False,,,,,,pending
+2026-11-05 23:41 ET,401916314,2026-11-06,Youngstown State Penguins,Ohio State Buckeyes,low-major v power,151.1,154.5,154.5,,,UNDER,0.558,-12.7,-25.5,Youngstown State Penguins,0.864,1,False,,,,,,pending
+2026-11-05 23:41 ET,401920717,2026-11-06,Eastern Washington Eagles,Oregon Ducks,low-major v power,147.1,152.5,151.5,,,UNDER,0.584,-12.5,-16.5,Eastern Washington Eagles,0.634,1,True,,,,,,pending
+2026-11-05 23:41 ET,401920423,2026-11-06,Northeastern Huskies,Virginia Cavaliers,low-major v power,155.4,159.5,159.5,,,UNDER,0.57,-27.0,-34.5,Northeastern Huskies,0.743,1,True,,,,,,pending
+2026-11-05 23:41 ET,401909552,2026-11-06,Massachusetts Minutemen,Boston College Eagles,low-major v power,143.4,144.5,145.5,,,UNDER,0.522,-3.1,-6.5,Massachusetts Minutemen,0.615,1,False,,,,,,pending

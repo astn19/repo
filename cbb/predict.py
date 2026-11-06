@@ -36,14 +36,8 @@ def upcoming_games(days, start=None):
     })
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--days", type=int, default=3)
-    ap.add_argument("--start", default=None, help="YYYY-MM-DD (default today)")
-    ap.add_argument("--lines", default=None, help="lines CSV for these games; use OPENING totals (that is where the edge is)")
-    ap.add_argument("--min-prob", type=float, default=0.56)
-    args = ap.parse_args()
-
+def project_upcoming(days, start=None):
+    """Model projections for scheduled games in [start, start+days). Returns (out, feats_df, sd_m, sd_t)."""
     rated = pd.read_parquet(C.PROCESSED / "games_rated.parquet")
     finals = pd.read_pickle(C.PROCESSED / "final_ratings.pkl")
     p = RatingParams()
@@ -53,10 +47,9 @@ def main():
         cur = {t: (p.prior_regress * o, p.prior_regress * d, p.pace_regress * pc) for t, (o, d, pc) in prev.items()}
         meta = {**finals[C.LAST_SEASON - 1][1], "games_played": {}}
 
-    up = upcoming_games(args.days, args.start)
+    up = upcoming_games(days, start)
     if up.empty:
-        print("No upcoming games found in the schedule for that window.")
-        return
+        return None
     d1 = {t for t in list(cur) + list(prev) if t != OTHER}
     up["home_d1"] = up.home_id.isin(d1)
     up["away_d1"] = up.away_id.isin(d1)
@@ -96,6 +89,22 @@ def main():
     out = f[["game_id", "game_date", "away_name", "home_name", "neutral_site", "ml_margin", "ml_total"]].copy()
     out["model_home_spread"] = -out.ml_margin.round(1)
     out["model_total"] = out.ml_total.round(1)
+    return out, f, sd_m, sd_t
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--days", type=int, default=3)
+    ap.add_argument("--start", default=None, help="YYYY-MM-DD (default today)")
+    ap.add_argument("--lines", default=None, help="lines CSV for these games; use OPENING totals (that is where the edge is)")
+    ap.add_argument("--min-prob", type=float, default=0.56)
+    args = ap.parse_args()
+
+    res = project_upcoming(args.days, args.start)
+    if res is None:
+        print("No upcoming games found in the schedule for that window.")
+        return
+    out, f, sd_m, sd_t = res
 
     if args.lines:
         matcher = TeamMatcher(sorted(C.RAW.glob("team_box_*.parquet")))
