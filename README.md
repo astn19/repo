@@ -95,6 +95,28 @@ Totals vs open by season: 2024 52.9%, 2025 54.3%, 2026 55.0%. The edge holds out
 smaller than in 2014–21 (56.8%). It works against opening numbers only, so bets must be placed
 early, and the backtest uses the median opener across books, which is not a price you can always get.
 
+## Where the edge is (segment analysis, `python -m cbb.segments`)
+
+Found on 2014–21, then checked on 2022–26. Bets with model probability ≥ 0.55.
+
+**Totals vs opening line.** The edge is broad: almost every slice beats 52.4% in both periods.
+Slices that were stronger in both periods:
+
+| Slice | 2014–21 | 2024–26 |
+|---|---|---|
+| Unders | 58.6% (4,885) | 55.1% (2,981) |
+| Power v power or high-mid v high-mid conference teams | 56.7% (5,248) | 56.4% (1,853) |
+| Opening total under 140 | 57.0% (6,543) | 55.2% (2,058) |
+| Calibrated probability ≥ 0.56 (`cbb.calibrate`) | 58.8% (7,330) | 55.5% (3,564) |
+| Calibrated probability ≥ 0.58 | 60.0% (3,876) | 56.5% (1,854) |
+
+Weak spots: high-mid v power games (58% then 48%), fast-paced games (72+ possessions).
+
+**Spreads.** No slice works in both periods. Avoid spreads when both teams are top 25 (45.6% / 47.0%).
+
+**Ranked teams.** The AP poll is only available from 2023 on, so "top 25" uses the model's own
+ratings (cutoff = last season's 25th-best team). Totals with both teams top 25 hit 56–57%, but the sample is small (~200–400 bets).
+
 ## How to read a backtest honestly
 
 * Look at the **p-value vs 52.4%**. Fewer than ~1,000 bets at 54% is still within noise.

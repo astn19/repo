@@ -5,4 +5,5 @@ cd "$(dirname "$0")"
 python -m cbb.data --refresh-current
 python -m cbb.ratings
 python -m cbb.model
+python -m cbb.calibrate
 python -m cbb.predict --days 2 "$@"

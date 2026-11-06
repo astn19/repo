@@ -15,6 +15,7 @@ from scipy.stats import norm
 
 from . import config as C
 from .features import build
+from .calibrate import load as load_calibration, p_over
 from .lines import TeamMatcher, load_lines
 from .model import fit_final
 from .ratings import OTHER, RatingParams, project
@@ -39,8 +40,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--days", type=int, default=3)
     ap.add_argument("--start", default=None, help="YYYY-MM-DD (default today)")
-    ap.add_argument("--lines", default=None, help="lines CSV for these games")
-    ap.add_argument("--min-prob", type=float, default=0.55)
+    ap.add_argument("--lines", default=None, help="lines CSV for these games; use OPENING totals (that is where the edge is)")
+    ap.add_argument("--min-prob", type=float, default=0.56)
     args = ap.parse_args()
 
     rated = pd.read_parquet(C.PROCESSED / "games_rated.parquet")
@@ -105,11 +106,13 @@ def main():
         out = out.merge(L, on="game_id", how="left")
         if "spread" in out:
             ph = norm.cdf((out.ml_margin + out.spread) / sd_m)
-            out["spread_pick"] = np.where(ph >= 0.5, out.home_name, out.away_name)
+            out["spread_pick"] = np.where(out.spread.isna(), "", np.where(ph >= 0.5, out.home_name, out.away_name))
             out["spread_prob"] = np.maximum(ph, 1 - ph).round(3)
         if "total" in out:
-            po = norm.cdf((out.ml_total - out.total) / sd_t)
-            out["total_pick"] = np.where(po >= 0.5, "OVER", "UNDER")
+            cal = load_calibration()
+            # Calibrated P(over) (removes the raw model's over lean); falls back to normal model.
+            po = p_over(cal, out.ml_total, out.total) if cal else norm.cdf((out.ml_total - out.total) / sd_t)
+            out["total_pick"] = np.where(out.total.isna(), "", np.where(po >= 0.5, "OVER", "UNDER"))
             out["total_prob"] = np.maximum(po, 1 - po).round(3)
 
     pd.set_option("display.width", 220)
