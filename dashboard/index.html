@@ -36,6 +36,11 @@
   .tk-confbar i { display: block; height: 100%; background: var(--color-fg); opacity: .55; border-radius: 2px; }
   @media (max-width: 600px) { .tk-confbar { display: none; } .tk-plays .game { font-size: var(--cds-font-size-caption); } }
 
+  .tk-dayline { display: flex; flex-wrap: wrap; gap: 6px 24px; padding: 10px 10px 4px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .tk-dayline b { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: 1.35rem; color: var(--color-fg); margin-left: 6px; font-variant-numeric: tabular-nums; }
+  .tk-dayline b.pos { color: var(--color-ok); }
+  .tk-dayline b.neg { color: var(--color-bad); }
+
   /* Passes */
   .tk-pass { border: 1px solid var(--color-border-line); border-radius: calc(var(--cds-radius) * 2); background: var(--color-panel); }
   .tk-pass > summary { cursor: pointer; padding: 14px 18px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); list-style-position: inside; }
@@ -101,6 +106,31 @@
     </div>
   </section>
 
+  <section class="tk-sec" id="yesterday">
+    <div class="tk-sec-head">
+      <h2>Yesterday's results</h2>
+      <span class="meta" data-draw="y-date" data-source="lastday_summary" data-field="date">—</span>
+    </div>
+    <p class="tk-empty" data-empty="yesterday" hidden>No graded plays yet. The first results post the morning after the first games.</p>
+    <div class="tk-table-card" data-wrap="yesterday">
+      <div class="tk-dayline">
+        <span>Record <b data-draw="y-record" data-source="lastday_summary" data-field="record">—</b></span>
+        <span>Profit <b data-draw="y-usd" data-source="lastday_summary" data-field="profit_dollars">—</b></span>
+      </div>
+      <table class="tk-rows" data-source="lastday" data-row-key="game_id">
+        <thead><tr>
+          <th data-field="result_open"></th>
+          <th data-field="matchup">Game</th>
+          <th data-field="pick">Pick</th>
+          <th class="num" data-field="open_total">Line</th>
+          <th class="num" data-field="final_total">Final</th>
+          <th class="num" data-field="dollars">Profit</th>
+        </tr></thead>
+        <tbody data-draw="yday-rows"></tbody>
+      </table>
+    </div>
+  </section>
+
   <section class="tk-sec" id="plays">
     <div class="tk-sec-head">
       <h2>Today's plays</h2>
@@ -140,7 +170,7 @@
   <section class="tk-sec" id="profit">
     <div class="tk-sec-head">
       <h2>Profit over time</h2>
-      <span class="meta">Running units after each graded day</span>
+      <span class="meta">Running profit at $20 per play</span>
     </div>
     <p class="tk-empty" data-empty="chart" hidden>The chart starts after the first day of plays is graded.</p>
     <div class="tk-chart-card" data-wrap="chart"><div class="tk-chart" data-draw="cum" data-source="daily"></div></div>
@@ -148,7 +178,7 @@
 
   <section class="tk-sec" id="results">
     <div class="tk-sec-head">
-      <h2>Results</h2>
+      <h2>All results</h2>
       <span class="meta">Every graded play, newest first</span>
     </div>
     <p class="tk-empty" data-empty="results" hidden>No graded plays yet. Results fill in the morning after each game.</p>
@@ -162,8 +192,7 @@
             <th data-field="pick">Pick</th>
             <th class="num" data-field="open_total">Open</th>
             <th class="num" data-field="final_total">Final</th>
-            <th class="num" data-field="units_open">Units</th>
-            <th class="num tk-narrow-hide" data-field="units_line">At pick line</th>
+            <th class="num" data-field="dollars">Profit</th>
           </tr></thead>
           <tbody data-draw="result-rows"></tbody>
         </table>
@@ -177,8 +206,9 @@
       <dt>Model</dt><dd>Offense, defense and pace ratings for every team, refit before each game date, plus a machine-learning correction. It projects each game's total points.</dd>
       <dt>Bet rule</dt><dd>Over or under the opening total when the model's calibrated confidence is at least <b data-draw="m-cut">—</b>. Everything else is a pass.</dd>
       <dt>Backtest</dt><dd>This rule won about 55% of bets on 2024–26 opening totals and about 57% on 2014–21. Past results do not guarantee future ones.</dd>
+      <dt>Updates</dt><dd>Every morning at 8:41 AM Eastern: yesterday's games are graded and today's picks are posted.</dd>
       <dt>Lines</dt><dd>ESPN's odds feed: the median opening total across sportsbooks, and the line posted when the pick was logged.</dd>
-      <dt>Profit</dt><dd>Units at the posted price, or -110 when none was posted. "At pick-time lines" grades against the number you could have bet that morning.</dd>
+      <dt>Profit</dt><dd>$20 per play at the posted price, or -110 when none was posted. The chart's second line grades against the number you could have bet that morning.</dd>
       <dt>Spreads</dt><dd>Not played. The model showed no edge against the spread.</dd>
     </dl>
   </details>
@@ -213,7 +243,7 @@
 
   dash.calc('daily', {
     title: 'Units by day',
-    description: 'Units won per day on graded plays and the running total, against the opening total and the pick-time line.',
+    description: 'Running profit at $20 per play after each graded day, against the opening total and the pick-time line.',
     inputs: ['picks'],
     fn: (picks) => {
       const done = picks.filter((r) => (r.play === true || r.play === 'True' || r.play === 'true') && r.status === 'final');
@@ -225,7 +255,7 @@
       let co = 0, cl = 0;
       return by.map(([date, s]) => {
         co += s.units_open; cl += s.units_line;
-        return { date, bets: s.bets, cum_open: Math.round(co * 100) / 100, cum_line: Math.round(cl * 100) / 100 };
+        return { date, bets: s.bets, cum_dollars: Math.round(co * 20 * 100) / 100, cum_dollars_line: Math.round(cl * 20 * 100) / 100 };
       });
     },
   });
@@ -254,6 +284,34 @@
       .sort((a, b) => d3.ascending(a.date, b.date) || d3.descending(a.confidence, b.confidence)),
   });
 
+  dash.calc('lastday', {
+    title: 'Yesterday\'s plays',
+    description: 'Plays from the most recent day with final scores, graded against the opening total, $20 per play.',
+    inputs: ['picks'],
+    fn: (picks) => {
+      const done = picks.filter((r) => (r.play === true || r.play === 'True' || r.play === 'true') && r.status === 'final');
+      const last = d3.max(done, (r) => r.game_date);
+      return done.filter((r) => r.game_date === last)
+        .map((r) => ({ game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
+                       open_total: r.open_total, final_total: r.final_total, result_open: r.result_open,
+                       dollars: Math.round((Number(r.units_open) || 0) * 20 * 100) / 100 }))
+        .sort((a, b) => d3.ascending(a.result_open, b.result_open) || d3.ascending(a.matchup, b.matchup));
+    },
+  });
+
+  dash.calc('lastday_summary', {
+    title: 'Yesterday\'s record',
+    description: 'Record and profit ($20 per play) for the most recent day with graded plays.',
+    inputs: ['lastday'],
+    fn: (lastday) => {
+      if (!lastday.length) return [];
+      const w = lastday.filter((r) => r.result_open === 'W').length, l = lastday.filter((r) => r.result_open === 'L').length;
+      const p = lastday.filter((r) => r.result_open === 'P').length;
+      return [{ date: lastday[0].date, record: `${w}–${l}` + (p ? `–${p}` : ''),
+                profit_dollars: Math.round(d3.sum(lastday, (r) => r.dollars) * 100) / 100 }];
+    },
+  });
+
   dash.calc('graded', {
     title: 'Graded plays',
     description: 'Plays with a final score, newest first, graded against the opening total.',
@@ -262,7 +320,7 @@
       .filter((r) => (r.play === true || r.play === 'True' || r.play === 'true') && r.status === 'final')
       .map((r) => ({ game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
                      open_total: r.open_total, final_total: r.final_total, result_open: r.result_open,
-                     units_open: r.units_open, units_line: r.units_line }))
+                     dollars: Math.round((Number(r.units_open) || 0) * 20 * 100) / 100 }))
       .sort((a, b) => d3.descending(a.date, b.date)),
   });
 </script>
@@ -272,6 +330,7 @@
   const signed = (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + d3.format('.2f')(Math.abs(v));
   const dayLabel = (s) => d3.utcFormat('%A, %B %-d')(new Date(s + 'T00:00:00Z'));
   const shortDay = (s) => d3.utcFormat('%b %-d')(new Date(s + 'T00:00:00Z'));
+  const usd = (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + '$' + d3.format(',.2f')(Math.abs(v));
   const tone = (v) => (v > 0 ? 'pos' : v < 0 ? 'neg' : '');
   const one = (id) => { const g = dash.data(id); return g.status === 'ok' && g.data.length ? g.data[0] : null; };
   const pickColor = (p) => (p === 'OVER' ? dash.colors[1] : dash.colors[0]);
@@ -288,11 +347,13 @@
     empty('chart', daily.status === 'ok' && daily.data.length === 0);
     wrap('chart', !(daily.status === 'ok' && daily.data.length === 0));
     empty('results', grad.status === 'ok' && grad.data.length === 0);
+    const ld = dash.data('lastday');
+    empty('yesterday', ld.status === 'ok' && ld.data.length === 0);
+    wrap('yesterday', !(ld.status === 'ok' && ld.data.length === 0));
     wrap('results', !(grad.status === 'ok' && grad.data.length === 0));
     document.querySelectorAll('#passes').forEach((d) => { d.hidden = pas.status === 'ok' && pas.data.length === 0; });
   });
 
-  const usd = (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + '$' + d3.format(',.2f')(Math.abs(v));
   dash.draw('h-cut', (n) => { n.textContent = pct0(window.TK.MIN_PROB); });
   dash.draw('h-unit', (n) => { n.textContent = '$' + window.TK.UNIT_DOLLARS; });
   dash.draw('m-cut', (n) => { n.textContent = pct0(window.TK.MIN_PROB); });
@@ -321,6 +382,25 @@
     }));
   });
 
+  const badge = (res) => { const td = el('td'); td.appendChild(el('span', 'tk-badge ' + (res || 'P'), res || 'P')); return td; };
+  dash.draw('y-date', (n) => { const s = one('lastday_summary'); n.textContent = s ? dayLabel(s.date) : '—'; });
+  dash.draw('y-record', (n) => { const s = one('lastday_summary'); n.textContent = s ? s.record : '—'; });
+  dash.draw('y-usd', (n) => { const s = one('lastday_summary'); n.classList.remove('pos', 'neg'); if (!s) { n.textContent = '—'; return; } n.textContent = usd(s.profit_dollars); if (tone(s.profit_dollars)) n.classList.add(tone(s.profit_dollars)); });
+  dash.draw('yday-rows', (tb) => {
+    const g = dash.data('lastday');
+    const rows = g.status === 'ok' ? g.data : [];
+    tb.replaceChildren(...rows.map((r) => {
+      const tr = el('tr'); tr.dataset.key = r.game_id;
+      tr.appendChild(badge(r.result_open));
+      tr.appendChild(el('td', 'game', r.matchup));
+      const pk = el('td'); const chip = el('span', 'tk-pick', r.pick); chip.style.setProperty('--pick', pickColor(r.pick)); pk.appendChild(chip); tr.appendChild(pk);
+      tr.appendChild(el('td', 'num', f1(r.open_total)));
+      tr.appendChild(el('td', 'num', r.final_total == null ? '' : String(r.final_total)));
+      tr.appendChild(el('td', 'num tk-u ' + tone(r.dollars), usd(r.dollars)));
+      return tr;
+    }));
+  });
+
   dash.draw('pass-rows', (tb) => {
     const g = dash.data('passes');
     const rows = g.status === 'ok' ? g.data : [];
@@ -343,11 +423,10 @@
       const b = el('td'); b.appendChild(el('span', 'tk-badge ' + (r.result_open || 'P'), r.result_open || 'P')); tr.appendChild(b);
       tr.appendChild(el('td', 'tk-narrow-hide', shortDay(r.date)));
       tr.appendChild(el('td', 'game', r.matchup));
-      tr.appendChild(el('td', 'pk', r.pick));
+      const pk2 = el('td'); const chip2 = el('span', 'tk-pick', r.pick); chip2.style.setProperty('--pick', pickColor(r.pick)); pk2.appendChild(chip2); tr.appendChild(pk2);
       tr.appendChild(el('td', 'num', f1(r.open_total)));
       tr.appendChild(el('td', 'num', r.final_total == null ? '' : String(r.final_total)));
-      tr.appendChild(el('td', 'num tk-u ' + tone(Number(r.units_open)), r.units_open == null ? '' : signed(Number(r.units_open))));
-      tr.appendChild(el('td', 'num tk-u tk-narrow-hide ' + tone(Number(r.units_line)), r.units_line == null ? '' : signed(Number(r.units_line))));
+      tr.appendChild(el('td', 'num tk-u ' + tone(r.dollars), usd(r.dollars)));
       return tr;
     }));
   });
@@ -359,23 +438,23 @@
     const rows = g.data.map((r) => ({ ...r, d: new Date(r.date + 'T00:00:00Z') }));
     const W = box.clientWidth || 600, H = 240, top = 14, bottom = 26;
     const series = [
-      { key: 'cum_open', name: 'vs open', color: dash.colors[0] },
-      { key: 'cum_line', name: 'at pick line', color: 'var(--cds-chart-muted)' },
+      { key: 'cum_dollars', name: 'vs open', color: dash.colors[0] },
+      { key: 'cum_dollars_line', name: 'at pick line', color: 'var(--cds-chart-muted)' },
     ];
     const y = d3.scaleLinear(d3.extent(rows.flatMap((r) => series.map((s) => r[s.key])).concat([0])), [H - bottom, top]).nice();
     const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
     const probe = svg.append('text').attr('font-size', 12);
     const yt = y.ticks(5);
-    const left = d3.max(yt, (t) => { probe.text(signed(t)); return probe.node().getComputedTextLength(); }) + 10;
+    const left = d3.max(yt, (t) => { probe.text(usd(t)); return probe.node().getComputedTextLength(); }) + 10;
     const last = rows[rows.length - 1];
-    const right = d3.max(series, (s) => { probe.text(`${s.name} ${signed(last[s.key])}`); return probe.node().getComputedTextLength(); }) + 12;
+    const right = d3.max(series, (s) => { probe.text(`${s.name} ${usd(last[s.key])}`); return probe.node().getComputedTextLength(); }) + 12;
     probe.remove();
     const xr = [left, Math.max(left + 60, W - Math.min(right, W * 0.42))];
     const x = rows.length > 1 ? d3.scaleUtc(d3.extent(rows, (r) => r.d), xr) : d3.scaleUtc([d3.utcDay.offset(rows[0].d, -1), rows[0].d], xr);
     svg.append('g').selectAll('line').data(yt).join('line').attr('x1', xr[0]).attr('x2', xr[1]).attr('y1', y).attr('y2', y).attr('stroke', 'var(--cds-chart-grid)');
     svg.append('line').attr('x1', xr[0]).attr('x2', xr[1]).attr('y1', y(0)).attr('y2', y(0)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 3');
     svg.append('g').selectAll('text').data(yt).join('text').attr('x', left - 8).attr('y', y).attr('dy', '0.32em').attr('text-anchor', 'end')
-      .attr('font-size', 12).attr('fill', 'var(--color-fg-muted)').text(signed);
+      .attr('font-size', 12).attr('fill', 'var(--color-fg-muted)').text(usd);
     const xt = x.ticks(Math.max(2, Math.floor((xr[1] - xr[0]) / 90)));
     svg.append('g').selectAll('text').data(xt).join('text').attr('x', x).attr('y', H - 6).attr('text-anchor', 'middle')
       .attr('font-size', 12).attr('fill', 'var(--color-fg-muted)').text(d3.utcFormat('%b %-d'));
@@ -384,18 +463,18 @@
     const grad = svg.append('defs').append('linearGradient').attr('id', gid).attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
     [[0, .26], [.25, .16], [.5, .08], [.75, .03], [1, 0]].forEach(([o, a]) => grad.append('stop').attr('offset', o).attr('style', `stop-color:${dash.colors[0]};stop-opacity:${a}`));
     svg.append('path').datum(rows).attr('fill', `url(#${gid})`)
-      .attr('d', d3.area().x((r) => x(r.d)).y0(y(0)).y1((r) => y(r.cum_open)));
+      .attr('d', d3.area().x((r) => x(r.d)).y0(y(0)).y1((r) => y(r.cum_dollars)));
     const ends = [];
     [...series].reverse().forEach((s) => {
-      svg.append('path').datum(rows).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', s.key === 'cum_open' ? 2.5 : 1.5)
+      svg.append('path').datum(rows).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', s.key === 'cum_dollars' ? 2.5 : 1.5)
         .attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round').attr('d', d3.line().x((r) => x(r.d)).y((r) => y(r[s.key])));
       ends.push({ s, y: y(last[s.key]) });
     });
-    svg.append('circle').attr('cx', x(last.d)).attr('cy', y(last.cum_open)).attr('r', 4).attr('fill', dash.colors[0]).attr('stroke', 'var(--color-panel)').attr('stroke-width', 2);
+    svg.append('circle').attr('cx', x(last.d)).attr('cy', y(last.cum_dollars)).attr('r', 4).attr('fill', dash.colors[0]).attr('stroke', 'var(--color-panel)').attr('stroke-width', 2);
     ends.sort((a, b) => a.y - b.y);
     for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 15) ends[i].y = ends[i - 1].y + 15;
     ends.forEach((e) => svg.append('text').attr('x', xr[1] + 8).attr('y', e.y).attr('dy', '0.32em').attr('font-size', 12)
-      .attr('fill', e.s.key === 'cum_open' ? 'var(--color-fg)' : 'var(--color-fg-muted)').text(`${e.s.name} ${signed(last[e.s.key])}`));
+      .attr('fill', e.s.key === 'cum_dollars' ? 'var(--color-fg)' : 'var(--color-fg-muted)').text(`${e.s.name} ${usd(last[e.s.key])}`));
     const tip = d3.select(box).append('div').attr('class', 'tk-tip').style('display', 'none');
     const rule = svg.append('line').attr('y1', top).attr('y2', H - bottom).attr('stroke', 'var(--cds-chart-axis)').style('display', 'none');
     svg.append('rect').attr('x', xr[0]).attr('y', 0).attr('width', xr[1] - xr[0]).attr('height', H).attr('fill', 'transparent')
@@ -406,7 +485,7 @@
         rule.style('display', null).attr('x1', x(r.d)).attr('x2', x(r.d));
         tip.style('display', null).selectAll('*').remove();
         tip.append('div').attr('class', 'd').text(`${shortDay(r.date)} · ${r.bets} play${r.bets === 1 ? '' : 's'}`);
-        series.forEach((s) => { const ln = tip.append('div'); ln.append('span').attr('class', 'sw').style('background', s.color); ln.append('span').text(`${s.name}: ${signed(r[s.key])}`); });
+        series.forEach((s) => { const ln = tip.append('div'); ln.append('span').attr('class', 'sw').style('background', s.color); ln.append('span').text(`${s.name}: ${usd(r[s.key])}`); });
         const host = box.getBoundingClientRect(), tb = tip.node().getBoundingClientRect();
         tip.style('left', `${Math.min(Math.max(0, (x(r.d) / W) * host.width + 10), host.width - tb.width)}px`).style('top', '6px');
       })

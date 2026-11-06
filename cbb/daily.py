@@ -112,13 +112,42 @@ def log_picks(day):
     return rec
 
 
+SCOREBOARD = ("https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard"
+              "?dates={}&groups=50&limit=500")
+
+
+def espn_finals(dates):
+    """Final totals straight from ESPN's scoreboard (the game-data release can lag a day)."""
+    out = {}
+    for d in sorted(set(dates)):
+        try:
+            evs = requests.get(SCOREBOARD.format(d.replace("-", "")), timeout=30).json().get("events", [])
+        except Exception as e:  # noqa: BLE001
+            print(f"  scoreboard fetch failed for {d}: {e}")
+            continue
+        for ev in evs:
+            comp = ev["competitions"][0]
+            if not comp["status"]["type"].get("completed"):
+                continue
+            try:
+                out[int(ev["id"])] = sum(int(t["score"]) for t in comp["competitors"])
+            except (KeyError, ValueError):
+                pass
+    return out
+
+
 def grade(ledger):
     g = pd.read_parquet(C.PROCESSED / "games.parquet", columns=["game_id", "total"])
-    fin = g.set_index("game_id").total
+    fin = g.set_index("game_id").total.to_dict()
+    pend = ledger[ledger.status == "pending"]
+    if len(pend):
+        days = set(pend.game_date)
+        days |= {(pd.Timestamp(d) + pd.Timedelta(days=1)).strftime("%Y-%m-%d") for d in days}  # late tips
+        fin.update(espn_finals(days))
     today = pd.Timestamp(datetime.now(ZoneInfo("America/New_York")).date())
     for i, r in ledger[ledger.status == "pending"].iterrows():
-        if r.game_id in fin.index:
-            tot = fin[r.game_id]
+        if int(r.game_id) in fin:
+            tot = fin[int(r.game_id)]
             ledger.at[i, "final_total"] = tot
             for line_col, res_col, u_col in (("open_total", "result_open", "units_open"),
                                              ("line_at_pick", "result_line", "units_line")):
