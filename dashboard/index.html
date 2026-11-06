@@ -1,161 +1,233 @@
 <meta name="dash-one-writer">
 <style>
-  .tt-page { display: flex; flex-direction: column; gap: var(--cds-gap-lg); font-family: var(--font-anthropic-sans); }
-  .tt-head h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
-  .tt-head p { margin: var(--cds-gap-xs) 0 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-body); max-width: 70ch; }
-  .tt-head p b { color: var(--color-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
-  .tt-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); gap: var(--cds-gap-md); }
-  .tt-tile, .tt-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width: 0; }
-  .tt-tile .lbl { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
-  .tt-tile .val { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; margin-top: var(--cds-gap-xs); display: block; min-height: 1.3em; }
-  .tt-tile .sub { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-top: var(--cds-gap-xs); }
-  .tt-tile .val.pos { color: var(--color-ok); }
-  .tt-tile .val.neg { color: var(--color-bad); }
-  .tt-card h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
-  .tt-card .note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: var(--cds-gap-xs) 0 var(--cds-gap-md); }
-  .tt-chart { position: relative; min-height: 260px; }
-  .tt-empty { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0; }
-  .tt-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; }
-  .tt-tip .d { color: var(--cds-text-secondary); }
-  .tt-tip .sw { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
-  .tt-tools { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); align-items: center; margin-bottom: var(--cds-gap-sm); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
-  .tt-tools label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
-  .tt-scroll { max-height: 34rem; overflow: auto; }
-  .tt-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
-  .tt-table th { position: sticky; top: 0; background: var(--color-panel); text-align: left; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
-  .tt-table td { padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
-  .tt-table td.num, .tt-table th.num { text-align: right; }
-  .tt-table td.wrap { white-space: normal; min-width: 12rem; }
-  .chip { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: var(--cds-font-size-caption); border: 1px solid var(--color-border-line); }
-  .chip.play { color: var(--color-ok); border-color: currentColor; font-weight: 600; }
-  .chip.pass { color: var(--color-fg-muted); }
-  .chip.W { color: var(--color-ok); border-color: currentColor; font-weight: 600; }
-  .chip.L { color: var(--color-bad); border-color: currentColor; font-weight: 600; }
-  .chip.P { color: var(--color-fg-muted); }
-  .pos { color: var(--color-ok); }
-  .neg { color: var(--color-bad); }
-  @media (max-width: 640px) { .tt-hide-narrow { display: none; } }
+  #dash-root { --dash-gutter: clamp(16px, 4vw, 40px); }
+  .tk { max-width: 1080px; margin-inline: auto; display: flex; flex-direction: column; gap: 28px; font-family: var(--font-anthropic-sans); }
+  .tk b { font-weight: inherit; }
+
+  /* Header */
+  .tk-head { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }
+  .tk-eyebrow { font-size: var(--cds-font-size-caption); letter-spacing: .08em; text-transform: uppercase; color: var(--color-fg-muted); }
+  .tk-head h1 { margin: 0; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: clamp(1.9rem, 4.5vw, 2.6rem); line-height: 1.1; text-wrap: balance; }
+  .tk-status { margin: 4px 0 0; font-size: var(--cds-font-size-body); color: var(--color-fg-muted); max-width: 62ch; line-height: 1.5; }
+  .tk-status b { color: var(--color-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* Scoreboard */
+  .tk-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: calc(var(--cds-radius) * 2); overflow: hidden; }
+  .tk-stat { padding: 22px 24px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .tk-stat + .tk-stat { border-left: 1px solid var(--color-border-line); }
+  .tk-stat .lbl { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: .04em; text-transform: uppercase; }
+  .tk-stat .big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1; font-variant-numeric: tabular-nums; min-height: 1em; }
+  .tk-stat .big.pos { color: var(--color-ok); }
+  .tk-stat .big.neg { color: var(--color-bad); }
+  .tk-stat .small { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+  .tk-stat .small b { color: var(--color-fg); font-weight: 600; }
+  .tk-gauge { height: 34px; margin-top: 4px; }
+  @media (max-width: 720px) {
+    .tk-board { grid-template-columns: 1fr; }
+    .tk-stat + .tk-stat { border-left: 0; border-top: 1px solid var(--color-border-line); }
+    .tk-stat { padding: 18px 20px; }
+  }
+
+  /* Section headings */
+  .tk-sec { display: flex; flex-direction: column; gap: 14px; }
+  .tk-sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+  .tk-sec-head h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+  .tk-sec-head .meta { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .tk-empty { margin: 0; padding: 22px; text-align: center; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); border: 1px dashed var(--color-border-line); border-radius: calc(var(--cds-radius) * 2); }
+
+  /* Ticket cards */
+  .tk-day { display: flex; flex-direction: column; gap: 10px; }
+  .tk-day + .tk-day { margin-top: 14px; }
+  .tk-day-label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: .04em; text-transform: uppercase; }
+  .tk-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+  .tk-card { --pick: var(--color-fg); position: relative; background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: calc(var(--cds-radius) * 2); padding: 16px 18px 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .tk-match { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .tk-match .away, .tk-match .home { font-size: var(--cds-font-size-body); line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tk-match .at { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .tk-bet { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px dashed var(--color-border-line); }
+  .tk-side { font-family: var(--font-anthropic-serif); font-size: 1.75rem; line-height: 1; color: var(--pick); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tk-side small { font-family: var(--font-anthropic-sans); font-size: var(--cds-font-size-caption); letter-spacing: .08em; margin-right: 6px; vertical-align: 4px; }
+  .tk-model { text-align: right; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; line-height: 1.4; }
+  .tk-model b { color: var(--color-fg); font-weight: 600; }
+  .tk-conf { display: flex; align-items: center; gap: 10px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+  .tk-meter { flex: 1; height: 6px; border-radius: 3px; background: var(--cds-chart-grid); overflow: hidden; }
+  .tk-meter i { display: block; height: 100%; border-radius: 3px; background: var(--pick); }
+  .tk-conf b { color: var(--color-fg); font-weight: 600; min-width: 3ch; text-align: right; }
+  .tk-tier { position: absolute; top: 14px; right: 16px; font-size: 11px; color: var(--color-fg-muted); letter-spacing: .04em; text-transform: uppercase; }
+
+  /* Passes */
+  .tk-pass { border: 1px solid var(--color-border-line); border-radius: calc(var(--cds-radius) * 2); background: var(--color-panel); }
+  .tk-pass > summary { cursor: pointer; padding: 14px 18px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); list-style-position: inside; }
+  .tk-pass > summary:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; border-radius: var(--cds-radius); }
+  .tk-pass-list { padding: 0 18px 10px; }
+
+  /* Lists (passes + results) */
+  .tk-rows { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+  .tk-rows th { text-align: left; font-weight: 400; color: var(--color-fg-muted); padding: 8px 10px; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+  .tk-rows td { padding: 10px; border-bottom: 1px solid var(--color-border-line); vertical-align: middle; }
+  .tk-rows tr:last-child td { border-bottom: 0; }
+  .tk-rows .num { text-align: right; white-space: nowrap; }
+  .tk-rows .game { min-width: 11rem; }
+  .tk-rows .game span { display: block; color: var(--color-fg-muted); }
+  .tk-rows .pk { white-space: nowrap; font-weight: 600; }
+  .tk-badge { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; font-size: 12px; font-weight: 700; color: var(--color-bg); background: var(--cds-chart-muted); }
+  .tk-badge.W { background: var(--color-ok); }
+  .tk-badge.L { background: var(--color-bad); }
+  .tk-u.pos { color: var(--color-ok); }
+  .tk-u.neg { color: var(--color-bad); }
+  .tk-table-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: calc(var(--cds-radius) * 2); padding: 6px 8px; overflow-x: auto; }
+  .tk-scroll { max-height: 32rem; overflow: auto; }
+  @media (max-width: 600px) { .tk-narrow-hide { display: none; } }
+
+  /* Chart */
+  .tk-chart-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: calc(var(--cds-radius) * 2); padding: 18px 18px 10px; }
+  .tk-chart { position: relative; min-height: 240px; }
+  .tk-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .tk-tip .d { color: var(--cds-text-secondary); margin-bottom: 2px; }
+  .tk-tip .sw { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
+
+  /* Method */
+  .tk-method { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); border-top: 1px solid var(--color-border-line); padding-top: 14px; }
+  .tk-method summary { cursor: pointer; }
+  .tk-method dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 18px; margin: 12px 0 0; max-width: 72ch; }
+  .tk-method dt { color: var(--color-fg); }
+  .tk-method dd { margin: 0; line-height: 1.5; }
+  @media (max-width: 520px) { .tk-method dl { grid-template-columns: 1fr; } .tk-method dd { margin-bottom: 6px; } }
+
   [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
   [data-dash-source-state=empty] { color: transparent; }
-  .tt-details { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
-  .tt-details dl { display: grid; grid-template-columns: max-content 1fr; gap: var(--cds-gap-xs) var(--cds-gap-md); margin: var(--cds-gap-sm) 0 0; }
-  .tt-details dt { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
-  .tt-details dd { margin: 0; }
+  @media (prefers-reduced-motion: no-preference) {
+    .tk-card { animation: tk-in var(--cds-dur-slow) var(--cds-ease-out) both; }
+    @keyframes tk-in { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  }
 </style>
 
-<div class="tt-page">
-  <header class="tt-head" id="overview">
+<div class="tk">
+  <header class="tk-head" id="overview">
+    <div class="tk-eyebrow">Paper trading · College basketball totals</div>
     <h1>CBB Totals Tracker</h1>
-    <p>Paper bets on college basketball totals: 1 unit on every game where the model is at least <b data-draw="minprob">—</b> confident against the opening total. Graded plays so far: <b data-draw="rec" data-source="summary" data-field="record">—</b>, <b data-draw="units" data-source="summary" data-field="units_open">—</b> units. Break-even is <b data-draw="breakeven">—</b>.</p>
+    <p class="tk-status" data-state="none" hidden>Picks are logged each morning. Results post the morning after each game, and the record below starts with the first graded day.</p>
+    <p class="tk-status" data-state="some" hidden>After <b data-draw="s-bets" data-source="summary" data-field="graded_plays">—</b> graded plays the model is <b data-draw="s-units" data-source="summary" data-field="units_open">—</b> units, winning <b data-draw="s-win" data-source="summary" data-field="win_pct_open">—</b> of decided bets against a <b data-draw="s-be">—</b> break-even.</p>
   </header>
 
-  <section class="tt-tiles" id="record" aria-label="Record">
-    <div class="tt-tile"><div class="lbl">Record on plays (W–L–P)</div><b class="val" data-draw="t-record" data-source="summary" data-field="record">—</b><div class="sub">Graded against the opening total</div></div>
-    <div class="tt-tile"><div class="lbl">Win rate vs opening total</div><b class="val" data-draw="t-win" data-source="summary" data-field="win_pct_open">—</b><div class="sub">Break-even <span data-draw="breakeven">—</span></div></div>
-    <div class="tt-tile"><div class="lbl">Units vs opening total</div><b class="val" data-draw="t-uopen" data-source="summary" data-field="units_open">—</b><div class="sub">What the backtest measured</div></div>
-    <div class="tt-tile"><div class="lbl">Units vs line at pick time</div><b class="val" data-draw="t-uline" data-source="summary" data-field="units_line">—</b><div class="sub">The number you could have bet</div></div>
-    <div class="tt-tile"><div class="lbl">Plays waiting on results</div><b class="val" data-draw="t-pending" data-source="summary" data-field="pending_plays">—</b><div class="sub">Latest picks: <span data-draw="t-latest" data-source="summary" data-field="latest_date">—</span></div></div>
-  </section>
-
-  <section class="tt-card" id="units-chart">
-    <h2>Running profit in units</h2>
-    <p class="note">Cumulative units after each day of graded plays, at -110 unless a price was posted.</p>
-    <p class="tt-empty" data-empty="chart-empty" hidden>The chart starts after the first day of plays is graded.</p>
-    <div class="tt-chart" data-draw="cum" data-source="daily"></div>
-  </section>
-
-  <section class="tt-card" id="picks">
-    <h2>Today's and upcoming picks</h2>
-    <p class="note">Locked when logged each morning. Plays are picks at or above the confidence cutoff; passes are shown for reference.</p>
-    <div class="tt-tools">
-      <label><input type="checkbox" id="tt-plays-only" checked> Plays only</label>
+  <section class="tk-board" id="record" aria-label="Season record">
+    <div class="tk-stat">
+      <div class="lbl">Record</div>
+      <b class="big" data-draw="b-record" data-source="summary" data-field="record">—</b>
+      <div class="small"><b data-draw="b-pending" data-source="summary" data-field="pending_plays">—</b> plays waiting on results</div>
     </div>
-    <div class="tt-scroll">
-      <table class="tt-table" data-source="pending" data-row-key="game_id">
-        <thead><tr>
-          <th data-field="date">Date</th>
-          <th data-field="matchup">Matchup (away at home)</th>
-          <th data-field="pick">Pick</th>
-          <th class="num" data-field="open_total">Open total</th>
-          <th class="num tt-hide-narrow" data-field="line_at_pick">Line at pick</th>
-          <th class="num" data-field="model_total">Model total</th>
-          <th class="num" data-field="confidence">Confidence</th>
-          <th data-field="status">Status</th>
-        </tr></thead>
-        <tbody data-draw="pending-rows"></tbody>
-      </table>
+    <div class="tk-stat">
+      <div class="lbl">Win rate</div>
+      <b class="big" data-draw="b-win" data-source="summary" data-field="win_pct_open">—</b>
+      <div class="tk-gauge" data-draw="gauge" data-source="summary"></div>
     </div>
-    <p class="tt-empty" data-empty="pending-empty" hidden>No picks waiting. New picks appear each morning once lines are posted.</p>
+    <div class="tk-stat">
+      <div class="lbl">Profit</div>
+      <b class="big" data-draw="b-units" data-source="summary" data-field="units_open">—</b>
+      <div class="small">units vs opening total · <b data-draw="b-uline" data-source="summary" data-field="units_line">—</b> at pick-time lines</div>
+    </div>
   </section>
 
-  <section class="tt-card" id="results">
-    <h2>Graded plays</h2>
-    <p class="note">Every play with a final score, newest first.</p>
-    <div class="tt-scroll">
-      <table class="tt-table" data-source="graded" data-row-key="game_id">
-        <thead><tr>
-          <th data-field="date">Date</th>
-          <th data-field="matchup">Matchup (away at home)</th>
-          <th data-field="pick">Pick</th>
-          <th class="num" data-field="open_total">Open total</th>
-          <th class="num" data-field="final_total">Final total</th>
-          <th data-field="result_open">Result</th>
-          <th class="num" data-field="units_open">Units</th>
-          <th class="num tt-hide-narrow" data-field="units_line">Units at pick line</th>
-        </tr></thead>
-        <tbody data-draw="graded-rows"></tbody>
-      </table>
+  <section class="tk-sec" id="plays">
+    <div class="tk-sec-head">
+      <h2>Today's plays</h2>
+      <span class="meta">1 unit each · locked when logged</span>
     </div>
-    <p class="tt-empty" data-empty="graded-empty" hidden>No graded plays yet. Results fill in the morning after each game.</p>
+    <div data-draw="plays" data-source="pending"></div>
+    <p class="tk-empty" data-empty="plays" hidden>No plays open right now. New picks appear each morning once lines are posted.</p>
+    <details class="tk-pass" id="passes">
+      <summary>Other games with lines, where the model passes</summary>
+      <div class="tk-pass-list">
+        <table class="tk-rows" data-source="passes" data-row-key="game_id">
+          <thead><tr>
+            <th data-field="matchup">Game</th>
+            <th data-field="pick">Lean</th>
+            <th class="num" data-field="open_total">Open</th>
+            <th class="num" data-field="model_total">Model</th>
+            <th class="num" data-field="confidence">Conf.</th>
+          </tr></thead>
+          <tbody data-draw="pass-rows"></tbody>
+        </table>
+      </div>
+    </details>
   </section>
 
-  <details class="tt-details" id="method">
+  <section class="tk-sec" id="profit">
+    <div class="tk-sec-head">
+      <h2>Profit over time</h2>
+      <span class="meta">Running units after each graded day</span>
+    </div>
+    <p class="tk-empty" data-empty="chart" hidden>The chart starts after the first day of plays is graded.</p>
+    <div class="tk-chart-card" data-wrap="chart"><div class="tk-chart" data-draw="cum" data-source="daily"></div></div>
+  </section>
+
+  <section class="tk-sec" id="results">
+    <div class="tk-sec-head">
+      <h2>Results</h2>
+      <span class="meta">Every graded play, newest first</span>
+    </div>
+    <p class="tk-empty" data-empty="results" hidden>No graded plays yet. Results fill in the morning after each game.</p>
+    <div class="tk-table-card" data-wrap="results">
+      <div class="tk-scroll">
+        <table class="tk-rows" data-source="graded" data-row-key="game_id">
+          <thead><tr>
+            <th data-field="result_open"></th>
+            <th class="tk-narrow-hide" data-field="date">Date</th>
+            <th data-field="matchup">Game</th>
+            <th data-field="pick">Pick</th>
+            <th class="num" data-field="open_total">Open</th>
+            <th class="num" data-field="final_total">Final</th>
+            <th class="num" data-field="units_open">Units</th>
+            <th class="num tk-narrow-hide" data-field="units_line">At pick line</th>
+          </tr></thead>
+          <tbody data-draw="result-rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <details class="tk-method" id="method">
     <summary>How the picks are made</summary>
     <dl>
-      <dt>Model</dt><dd>Team offense, defense and pace ratings refit before every game date, plus a machine-learning correction, projecting each game's total score.</dd>
-      <dt>Bet rule</dt><dd>Bet the over or under against the opening total when the calibrated model probability is at or above the cutoff above.</dd>
-      <dt>Backtest</dt><dd>On 2024–26 opening totals, this rule won about 55% of bets. Past results do not guarantee future ones.</dd>
-      <dt>Lines</dt><dd>From ESPN's odds feed: the median opening total across sportsbooks, and the line posted when the pick was logged.</dd>
-      <dt>Not included</dt><dd>Spread picks. The model showed no edge on spreads, so they are not played.</dd>
+      <dt>Model</dt><dd>Offense, defense and pace ratings for every team, refit before each game date, plus a machine-learning correction. It projects each game's total points.</dd>
+      <dt>Bet rule</dt><dd>Over or under the opening total when the model's calibrated confidence is at least <b data-draw="m-cut">—</b>. Everything else is a pass.</dd>
+      <dt>Backtest</dt><dd>This rule won about 55% of bets on 2024–26 opening totals and about 57% on 2014–21. Past results do not guarantee future ones.</dd>
+      <dt>Lines</dt><dd>ESPN's odds feed: the median opening total across sportsbooks, and the line posted when the pick was logged.</dd>
+      <dt>Profit</dt><dd>Units at the posted price, or -110 when none was posted. "At pick-time lines" grades against the number you could have bet that morning.</dd>
+      <dt>Spreads</dt><dd>Not played. The model showed no edge against the spread.</dd>
     </dl>
   </details>
 </div>
 
 <script>
-  // Fixed references chosen with the user (constants, not data).
-  window.TT = { MIN_PROB: 0.56, BREAKEVEN: 110 / 210 };
-  const pct = d3.format('.1%');
-  const signed = (v) => (v > 0 ? '+' : '') + d3.format('.2f')(v);
-  const fmtDay = (s) => d3.utcFormat('%a %b %-d')(new Date(s + 'T00:00:00Z'));
-  window.TT.fmt = { pct, signed, fmtDay };
+  // Fixed references (constants chosen with the user, not data).
+  window.TK = { MIN_PROB: 0.56, BREAKEVEN: 110 / 210, BACKTEST: 0.55 };
+  const isPlay = (r) => r.play === true || r.play === 'True' || r.play === 'true';
+  window.TK.isPlay = isPlay;
 
   dash.calc('summary', {
     title: 'Record summary',
-    description: 'Wins, losses, pushes and units on plays with a final score, plus plays still pending.',
+    description: 'Wins, losses, pushes and units on plays with a final score, plus plays still waiting on results.',
     inputs: ['picks'],
     fn: (picks) => {
       const plays = picks.filter((r) => r.play === true || r.play === 'True' || r.play === 'true');
       const done = plays.filter((r) => r.status === 'final');
       const n = (col, v) => done.filter((r) => r[col] === v).length;
       const w = n('result_open', 'W'), l = n('result_open', 'L'), p = n('result_open', 'P');
-      const wl = n('result_line', 'W'), ll = n('result_line', 'L');
       const sum = (col) => done.reduce((a, r) => a + (Number(r[col]) || 0), 0);
-      const dates = picks.map((r) => r.game_date).sort();
       return [{
-        record: `${w}–${l}–${p}`, wins: w, losses: l, pushes: p,
+        record: `${w}–${l}` + (p ? `–${p}` : ''), graded_plays: done.length,
         win_pct_open: w + l ? w / (w + l) : null,
-        win_pct_line: wl + ll ? wl / (wl + ll) : null,
         units_open: Math.round(sum('units_open') * 100) / 100,
         units_line: Math.round(sum('units_line') * 100) / 100,
         pending_plays: plays.filter((r) => r.status === 'pending').length,
-        latest_date: dates.length ? dates[dates.length - 1] : null,
       }];
     },
   });
 
   dash.calc('daily', {
     title: 'Units by day',
-    description: 'Units won per day on graded plays and the running total, against the opening total and the line at pick time.',
+    description: 'Units won per day on graded plays and the running total, against the opening total and the pick-time line.',
     inputs: ['picks'],
     fn: (picks) => {
       const done = picks.filter((r) => (r.play === true || r.play === 'True' || r.play === 'true') && r.status === 'final');
@@ -167,182 +239,253 @@
       let co = 0, cl = 0;
       return by.map(([date, s]) => {
         co += s.units_open; cl += s.units_line;
-        return { date, bets: s.bets, units_open: Math.round(s.units_open * 100) / 100, units_line: Math.round(s.units_line * 100) / 100,
-                 cum_open: Math.round(co * 100) / 100, cum_line: Math.round(cl * 100) / 100 };
+        return { date, bets: s.bets, cum_open: Math.round(co * 100) / 100, cum_line: Math.round(cl * 100) / 100 };
       });
     },
   });
 
   dash.calc('pending', {
-    title: 'Pending picks',
-    description: 'Picks whose games have no final score yet, earliest first, most confident first within a day.',
+    title: 'Open plays',
+    description: 'Plays whose games have no final score yet, by date, most confident first.',
     inputs: ['picks'],
     fn: (picks) => picks
-      .filter((r) => r.status === 'pending')
+      .filter((r) => r.status === 'pending' && (r.play === true || r.play === 'True' || r.play === 'true'))
       .map((r) => ({
-        game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
-        open_total: r.open_total, line_at_pick: r.line_at_pick, model_total: r.model_total,
-        confidence: r.prob, status: (r.play === true || r.play === 'True' || r.play === 'true') ? 'Play' : 'Pass',
+        game_id: String(r.game_id), date: r.game_date, away: r.away, home: r.home, tiers: r.tiers, pick: r.pick,
+        open_total: r.open_total, line_at_pick: r.line_at_pick, model_total: r.model_total, confidence: r.prob,
       }))
+      .sort((a, b) => d3.ascending(a.date, b.date) || d3.descending(a.confidence, b.confidence)),
+  });
+
+  dash.calc('passes', {
+    title: 'Passes',
+    description: 'Games with lines where the model is below the confidence cutoff, still waiting on a final score.',
+    inputs: ['picks'],
+    fn: (picks) => picks
+      .filter((r) => r.status === 'pending' && !(r.play === true || r.play === 'True' || r.play === 'true'))
+      .map((r) => ({ game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
+                     open_total: r.open_total, model_total: r.model_total, confidence: r.prob }))
       .sort((a, b) => d3.ascending(a.date, b.date) || d3.descending(a.confidence, b.confidence)),
   });
 
   dash.calc('graded', {
     title: 'Graded plays',
-    description: 'Plays with a final score, newest first, with the result against the opening total.',
+    description: 'Plays with a final score, newest first, graded against the opening total.',
     inputs: ['picks'],
     fn: (picks) => picks
       .filter((r) => (r.play === true || r.play === 'True' || r.play === 'true') && r.status === 'final')
-      .map((r) => ({
-        game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
-        open_total: r.open_total, final_total: r.final_total, result_open: r.result_open,
-        units_open: r.units_open, units_line: r.units_line,
-      }))
+      .map((r) => ({ game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
+                     open_total: r.open_total, final_total: r.final_total, result_open: r.result_open,
+                     units_open: r.units_open, units_line: r.units_line }))
       .sort((a, b) => d3.descending(a.date, b.date)),
   });
 </script>
 
 <script>
-  const { pct: P, signed: S, fmtDay: D } = window.TT.fmt;
-  const row0 = (id) => { const g = dash.data(id); return g.status === 'ok' && g.data.length ? g.data[0] : null; };
-  const setVal = (el, text, cls) => {
-    el.textContent = text;
-    el.classList.remove('pos', 'neg', 'dash-skeleton');
-    if (cls) el.classList.add(cls);
-  };
-  const tone = (v) => (v > 0 ? 'pos' : v < 0 ? 'neg' : null);
+  const pct = d3.format('.1%'), pct0 = d3.format('.0%'), f1 = d3.format('.1f');
+  const signed = (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + d3.format('.2f')(Math.abs(v));
+  const dayLabel = (s) => d3.utcFormat('%A, %B %-d')(new Date(s + 'T00:00:00Z'));
+  const shortDay = (s) => d3.utcFormat('%b %-d')(new Date(s + 'T00:00:00Z'));
+  const tone = (v) => (v > 0 ? 'pos' : v < 0 ? 'neg' : '');
+  const one = (id) => { const g = dash.data(id); return g.status === 'ok' && g.data.length ? g.data[0] : null; };
+  const pickColor = (p) => (p === 'OVER' ? dash.colors[1] : dash.colors[0]);
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const setBig = (node, text, cls) => { node.textContent = text; node.classList.remove('pos', 'neg'); if (cls) node.classList.add(cls); };
 
-  dash.draw('minprob', (el) => { el.textContent = d3.format('.0%')(window.TT.MIN_PROB); });
-  dash.draw('breakeven', (el) => { el.textContent = P(window.TT.BREAKEVEN); });
-
-  dash.draw('rec', (el) => { const r = row0('summary'); el.textContent = r ? r.record : '—'; });
-  dash.draw('units', (el) => { const r = row0('summary'); el.textContent = r ? S(r.units_open) : '—'; });
-  dash.draw('t-record', (el) => { const r = row0('summary'); setVal(el, r ? r.record : '—'); });
-  dash.draw('t-win', (el) => {
-    const r = row0('summary');
-    if (!r) return setVal(el, '—');
-    if (r.win_pct_open == null) return setVal(el, '—');
-    setVal(el, P(r.win_pct_open), r.win_pct_open > window.TT.BREAKEVEN ? 'pos' : 'neg');
-  });
-  dash.draw('t-uopen', (el) => { const r = row0('summary'); setVal(el, r ? S(r.units_open) : '—', r && tone(r.units_open)); });
-  dash.draw('t-uline', (el) => { const r = row0('summary'); setVal(el, r ? S(r.units_line) : '—', r && tone(r.units_line)); });
-  dash.draw('t-pending', (el) => { const r = row0('summary'); setVal(el, r ? String(r.pending_plays) : '—'); });
-  dash.draw('t-latest', (el) => { const r = row0('summary'); el.textContent = r && r.latest_date ? D(r.latest_date) : '—'; });
-
-  // Show/hide empty notes (outside drawings, onData may set `hidden`).
+  // Which sentences / empty notes show (onData may set `hidden` outside drawings).
   dash.onData(() => {
-    const daily = dash.data('daily'), pend = dash.data('pending'), grad = dash.data('graded');
-    const playsOnly = document.querySelector('#tt-plays-only')?.checked;
-    const pendRows = pend.status === 'ok' ? pend.data.filter((r) => !playsOnly || r.status === 'Play') : [];
-    document.querySelectorAll('[data-empty="chart-empty"]').forEach((e) => { e.hidden = !(daily.status === 'ok' && daily.data.length === 0); });
-    document.querySelectorAll('[data-empty="pending-empty"]').forEach((e) => { e.hidden = !(pend.status === 'ok' && pendRows.length === 0); });
-    document.querySelectorAll('[data-empty="graded-empty"]').forEach((e) => { e.hidden = !(grad.status === 'ok' && grad.data.length === 0); });
+    const s = one('summary');
+    const graded = s ? s.graded_plays : 0;
+    document.querySelectorAll('.tk-status[data-state]').forEach((p) => {
+      p.hidden = dash.data('summary').status !== 'ok' || (p.dataset.state === 'some') !== graded > 0;
+    });
+    const empty = (key, show) => document.querySelectorAll(`[data-empty="${key}"]`).forEach((n) => { n.hidden = !show; });
+    const wrap = (key, show) => document.querySelectorAll(`[data-wrap="${key}"]`).forEach((n) => { n.hidden = !show; });
+    const pend = dash.data('pending'), daily = dash.data('daily'), grad = dash.data('graded'), pas = dash.data('passes');
+    empty('plays', pend.status === 'ok' && pend.data.length === 0);
+    empty('chart', daily.status === 'ok' && daily.data.length === 0);
+    wrap('chart', !(daily.status === 'ok' && daily.data.length === 0));
+    empty('results', grad.status === 'ok' && grad.data.length === 0);
+    wrap('results', !(grad.status === 'ok' && grad.data.length === 0));
+    document.querySelectorAll('#passes').forEach((d) => { d.hidden = pas.status === 'ok' && pas.data.length === 0; });
   });
 
-  document.querySelectorAll('#tt-plays-only').forEach((cb) => cb.addEventListener('change', () => { dash.draw('pending-rows'); }));
+  dash.draw('s-be', (n) => { n.textContent = pct(window.TK.BREAKEVEN); });
+  dash.draw('m-cut', (n) => { n.textContent = pct0(window.TK.MIN_PROB); });
+  dash.draw('s-bets', (n) => { const s = one('summary'); n.textContent = s ? String(s.graded_plays) : '—'; });
+  dash.draw('s-units', (n) => { const s = one('summary'); n.textContent = s ? (s.units_open >= 0 ? 'up ' : 'down ') + d3.format('.2f')(Math.abs(s.units_open)) : '—'; });
+  dash.draw('s-win', (n) => { const s = one('summary'); n.textContent = s && s.win_pct_open != null ? pct(s.win_pct_open) : '—'; });
 
-  const cell = (tr, text, cls) => { const td = document.createElement('td'); td.textContent = text; if (cls) td.className = cls; tr.appendChild(td); return td; };
-  const chip = (tr, text, kind) => { const td = document.createElement('td'); const s = document.createElement('span'); s.className = 'chip ' + kind; s.textContent = text; td.appendChild(s); tr.appendChild(td); };
-  const num1 = (v) => (v == null || v === '' || Number.isNaN(Number(v)) ? '' : d3.format('.1f')(Number(v)));
+  dash.draw('b-record', (n) => { const s = one('summary'); n.textContent = s ? s.record : '—'; });
+  dash.draw('b-pending', (n) => { const s = one('summary'); n.textContent = s ? String(s.pending_plays) : '—'; });
+  dash.draw('b-win', (n) => {
+    const s = one('summary');
+    if (!s || s.win_pct_open == null) return setBig(n, '—');
+    setBig(n, pct(s.win_pct_open), s.win_pct_open > window.TK.BREAKEVEN ? 'pos' : 'neg');
+  });
+  dash.draw('b-units', (n) => { const s = one('summary'); if (!s) return setBig(n, '—'); setBig(n, signed(s.units_open), tone(s.units_open)); });
+  dash.draw('b-uline', (n) => { const s = one('summary'); n.textContent = s ? signed(s.units_line) : '—'; });
 
-  dash.draw('pending-rows', (tb) => {
+  // Win-rate gauge: 45%–65% track, break-even and backtest ticks, current rate as a dot.
+  dash.draw('gauge', (box) => {
+    box.replaceChildren();
+    const s = one('summary');
+    const W = box.clientWidth || 260, H = 34;
+    const x = d3.scaleLinear([0.45, 0.65], [6, W - 6]).clamp(true);
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    svg.append('rect').attr('x', x(0.45)).attr('y', 8).attr('width', x(0.65) - x(0.45)).attr('height', 6).attr('rx', 3).attr('fill', 'var(--cds-chart-grid)');
+    svg.append('rect').attr('x', x(window.TK.BREAKEVEN)).attr('y', 8).attr('width', x(0.65) - x(window.TK.BREAKEVEN)).attr('height', 6).attr('rx', 3)
+      .attr('fill', 'var(--color-ok)').attr('opacity', 0.18);
+    const ticks = [{ v: window.TK.BREAKEVEN, t: 'break-even ' + pct(window.TK.BREAKEVEN), a: 'end' }, { v: window.TK.BACKTEST, t: 'backtest ' + pct0(window.TK.BACKTEST), a: 'start' }];
+    ticks.forEach((k) => {
+      svg.append('line').attr('x1', x(k.v)).attr('x2', x(k.v)).attr('y1', 4).attr('y2', 18).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-width', 1.5);
+      svg.append('text').attr('x', x(k.v) + (k.a === 'end' ? -4 : 4)).attr('y', 31).attr('text-anchor', k.a)
+        .attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(k.t);
+    });
+    if (s && s.win_pct_open != null) {
+      svg.append('circle').attr('cx', x(s.win_pct_open)).attr('cy', 11).attr('r', 6)
+        .attr('fill', s.win_pct_open > window.TK.BREAKEVEN ? 'var(--color-ok)' : 'var(--color-bad)')
+        .attr('stroke', 'var(--color-panel)').attr('stroke-width', 2);
+    }
+  });
+
+  // Ticket cards, grouped by game date.
+  dash.draw('plays', (box) => {
     const g = dash.data('pending');
-    const playsOnly = document.querySelector('#tt-plays-only')?.checked;
-    const rows = g.status === 'ok' ? g.data.filter((r) => !playsOnly || r.status === 'Play') : [];
+    box.replaceChildren();
+    if (g.status !== 'ok' || !g.data.length) return;
+    const days = d3.groups(g.data, (r) => r.date);
+    days.forEach(([date, rows]) => {
+      const day = el('div', 'tk-day');
+      day.appendChild(el('div', 'tk-day-label', `${dayLabel(date)} · ${rows.length} play${rows.length === 1 ? '' : 's'}`));
+      const grid = el('div', 'tk-cards');
+      rows.forEach((r) => {
+        const c = el('article', 'tk-card');
+        c.style.setProperty('--pick', pickColor(r.pick));
+        c.dataset.key = r.game_id;
+        if (r.tiers) c.appendChild(el('span', 'tk-tier', String(r.tiers).replace('low-major', 'low').replace('high-mid', 'mid')));
+        const m = el('div', 'tk-match');
+        m.appendChild(el('div', 'away', r.away));
+        m.appendChild(el('div', 'at', 'at'));
+        m.appendChild(el('div', 'home', r.home));
+        c.appendChild(m);
+        const bet = el('div', 'tk-bet');
+        const side = el('div', 'tk-side');
+        side.appendChild(el('small', null, r.pick));
+        side.appendChild(document.createTextNode(f1(r.open_total)));
+        bet.appendChild(side);
+        const mod = el('div', 'tk-model');
+        const l1 = el('div'); l1.append('Model '); l1.appendChild(el('b', null, f1(r.model_total)));
+        const edge = r.model_total - r.open_total;
+        const l2 = el('div', null, `${edge > 0 ? '+' : '−'}${f1(Math.abs(edge))} vs open`);
+        mod.append(l1, l2);
+        if (r.line_at_pick != null && r.line_at_pick !== r.open_total) mod.appendChild(el('div', null, `Line now ${f1(r.line_at_pick)}`));
+        bet.appendChild(mod);
+        c.appendChild(bet);
+        const conf = el('div', 'tk-conf');
+        conf.appendChild(el('span', null, 'Confidence'));
+        const meter = el('div', 'tk-meter');
+        const fill = el('i');
+        fill.style.width = `${Math.max(0, Math.min(1, (r.confidence - 0.5) / 0.25)) * 100}%`;
+        meter.appendChild(fill);
+        conf.appendChild(meter);
+        conf.appendChild(el('b', null, pct0(r.confidence)));
+        c.appendChild(conf);
+        grid.appendChild(c);
+      });
+      day.appendChild(grid);
+      box.appendChild(day);
+    });
+  });
+
+  dash.draw('pass-rows', (tb) => {
+    const g = dash.data('passes');
+    const rows = g.status === 'ok' ? g.data : [];
     tb.replaceChildren(...rows.map((r) => {
-      const tr = document.createElement('tr');
-      tr.dataset.key = r.game_id;
-      cell(tr, D(r.date));
-      cell(tr, r.matchup, 'wrap');
-      cell(tr, r.pick);
-      cell(tr, num1(r.open_total), 'num');
-      cell(tr, num1(r.line_at_pick), 'num tt-hide-narrow');
-      cell(tr, num1(r.model_total), 'num');
-      cell(tr, d3.format('.0%')(r.confidence), 'num');
-      chip(tr, r.status, r.status === 'Play' ? 'play' : 'pass');
+      const tr = el('tr'); tr.dataset.key = r.game_id;
+      const game = el('td', 'game', r.matchup); tr.appendChild(game);
+      tr.appendChild(el('td', 'pk', r.pick));
+      tr.appendChild(el('td', 'num', f1(r.open_total)));
+      tr.appendChild(el('td', 'num', f1(r.model_total)));
+      tr.appendChild(el('td', 'num', pct0(r.confidence)));
       return tr;
     }));
-    document.querySelectorAll('[data-empty="pending-empty"]').forEach((e) => { e.hidden = !(g.status === 'ok' && rows.length === 0); });
   });
 
-  dash.draw('graded-rows', (tb) => {
+  dash.draw('result-rows', (tb) => {
     const g = dash.data('graded');
     const rows = g.status === 'ok' ? g.data : [];
     tb.replaceChildren(...rows.map((r) => {
-      const tr = document.createElement('tr');
-      tr.dataset.key = r.game_id;
-      cell(tr, D(r.date));
-      cell(tr, r.matchup, 'wrap');
-      cell(tr, r.pick);
-      cell(tr, num1(r.open_total), 'num');
-      cell(tr, r.final_total == null ? '' : String(r.final_total), 'num');
-      chip(tr, r.result_open || '', r.result_open || 'P');
-      cell(tr, r.units_open == null ? '' : S(Number(r.units_open)), 'num ' + (tone(Number(r.units_open)) || ''));
-      cell(tr, r.units_line == null ? '' : S(Number(r.units_line)), 'num tt-hide-narrow ' + (tone(Number(r.units_line)) || ''));
+      const tr = el('tr'); tr.dataset.key = r.game_id;
+      const b = el('td'); b.appendChild(el('span', 'tk-badge ' + (r.result_open || 'P'), r.result_open || 'P')); tr.appendChild(b);
+      tr.appendChild(el('td', 'tk-narrow-hide', shortDay(r.date)));
+      tr.appendChild(el('td', 'game', r.matchup));
+      tr.appendChild(el('td', 'pk', r.pick));
+      tr.appendChild(el('td', 'num', f1(r.open_total)));
+      tr.appendChild(el('td', 'num', r.final_total == null ? '' : String(r.final_total)));
+      tr.appendChild(el('td', 'num tk-u ' + tone(Number(r.units_open)), r.units_open == null ? '' : signed(Number(r.units_open))));
+      tr.appendChild(el('td', 'num tk-u tk-narrow-hide ' + tone(Number(r.units_line)), r.units_line == null ? '' : signed(Number(r.units_line))));
       return tr;
     }));
   });
 
-  dash.draw('cum', (el) => {
-    el.replaceChildren();
+  dash.draw('cum', (box) => {
+    box.replaceChildren();
     const g = dash.data('daily');
     if (g.status !== 'ok' || !g.data.length) return;
     const rows = g.data.map((r) => ({ ...r, d: new Date(r.date + 'T00:00:00Z') }));
-    const W = el.clientWidth || 600, H = 260;
+    const W = box.clientWidth || 600, H = 240, top = 14, bottom = 26;
     const series = [
-      { key: 'cum_open', name: 'vs opening total', color: dash.colors[0] },
-      { key: 'cum_line', name: 'vs line at pick', color: dash.colors[1] },
+      { key: 'cum_open', name: 'vs open', color: dash.colors[0] },
+      { key: 'cum_line', name: 'at pick line', color: 'var(--cds-chart-muted)' },
     ];
-    const vals = rows.flatMap((r) => series.map((s) => r[s.key])).concat([0]);
-    const y = d3.scaleLinear(d3.extent(vals), [H - 28, 12]).nice();
-    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
-    // measure widest y tick and end labels
+    const y = d3.scaleLinear(d3.extent(rows.flatMap((r) => series.map((s) => r[s.key])).concat([0])), [H - bottom, top]).nice();
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
     const probe = svg.append('text').attr('font-size', 12);
-    const yTicks = y.ticks(5);
-    const left = d3.max(yTicks, (t) => { probe.text(S(t)); return probe.node().getComputedTextLength(); }) + 10;
-    const right = d3.max(series, (s) => { probe.text(`${s.name} ${S(rows[rows.length - 1][s.key])}`); return probe.node().getComputedTextLength(); }) + 12;
+    const yt = y.ticks(5);
+    const left = d3.max(yt, (t) => { probe.text(signed(t)); return probe.node().getComputedTextLength(); }) + 10;
+    const last = rows[rows.length - 1];
+    const right = d3.max(series, (s) => { probe.text(`${s.name} ${signed(last[s.key])}`); return probe.node().getComputedTextLength(); }) + 12;
     probe.remove();
-    const xr = [left, Math.max(left + 40, W - Math.min(right, W * 0.45))];
+    const xr = [left, Math.max(left + 60, W - Math.min(right, W * 0.42))];
     const x = rows.length > 1 ? d3.scaleUtc(d3.extent(rows, (r) => r.d), xr) : d3.scaleUtc([d3.utcDay.offset(rows[0].d, -1), rows[0].d], xr);
-    svg.append('g').selectAll('line').data(yTicks).join('line')
-      .attr('x1', xr[0]).attr('x2', xr[1]).attr('y1', (t) => y(t)).attr('y2', (t) => y(t))
-      .attr('stroke', 'var(--cds-chart-grid)');
+    svg.append('g').selectAll('line').data(yt).join('line').attr('x1', xr[0]).attr('x2', xr[1]).attr('y1', y).attr('y2', y).attr('stroke', 'var(--cds-chart-grid)');
     svg.append('line').attr('x1', xr[0]).attr('x2', xr[1]).attr('y1', y(0)).attr('y2', y(0)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 3');
-    svg.append('g').selectAll('text').data(yTicks).join('text')
-      .attr('x', left - 8).attr('y', (t) => y(t)).attr('dy', '0.32em').attr('text-anchor', 'end')
-      .attr('font-size', 12).attr('fill', 'var(--color-fg-muted)').text((t) => S(t));
+    svg.append('g').selectAll('text').data(yt).join('text').attr('x', left - 8).attr('y', y).attr('dy', '0.32em').attr('text-anchor', 'end')
+      .attr('font-size', 12).attr('fill', 'var(--color-fg-muted)').text(signed);
     const xt = x.ticks(Math.max(2, Math.floor((xr[1] - xr[0]) / 90)));
-    svg.append('g').selectAll('text').data(xt).join('text')
-      .attr('x', (t) => x(t)).attr('y', H - 8).attr('text-anchor', 'middle')
-      .attr('font-size', 12).attr('fill', 'var(--color-fg-muted)').text((t) => d3.utcFormat('%b %-d')(t));
+    svg.append('g').selectAll('text').data(xt).join('text').attr('x', x).attr('y', H - 6).attr('text-anchor', 'middle')
+      .attr('font-size', 12).attr('fill', 'var(--color-fg-muted)').text(d3.utcFormat('%b %-d'));
+    // soft area under the main line
+    const gid = 'tk-grad';
+    const grad = svg.append('defs').append('linearGradient').attr('id', gid).attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
+    [[0, .26], [.25, .16], [.5, .08], [.75, .03], [1, 0]].forEach(([o, a]) => grad.append('stop').attr('offset', o).attr('style', `stop-color:${dash.colors[0]};stop-opacity:${a}`));
+    svg.append('path').datum(rows).attr('fill', `url(#${gid})`)
+      .attr('d', d3.area().x((r) => x(r.d)).y0(y(0)).y1((r) => y(r.cum_open)));
     const ends = [];
-    series.forEach((s) => {
-      const line = d3.line().x((r) => x(r.d)).y((r) => y(r[s.key]));
-      svg.append('path').datum(rows).attr('d', line).attr('fill', 'none').attr('stroke', s.color)
-        .attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
-      svg.append('g').selectAll('circle').data(rows).join('circle').attr('cx', (r) => x(r.d)).attr('cy', (r) => y(r[s.key])).attr('r', rows.length > 30 ? 0 : 2.5).attr('fill', s.color);
-      ends.push({ s, y: y(rows[rows.length - 1][s.key]) });
+    [...series].reverse().forEach((s) => {
+      svg.append('path').datum(rows).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', s.key === 'cum_open' ? 2.5 : 1.5)
+        .attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round').attr('d', d3.line().x((r) => x(r.d)).y((r) => y(r[s.key])));
+      ends.push({ s, y: y(last[s.key]) });
     });
+    svg.append('circle').attr('cx', x(last.d)).attr('cy', y(last.cum_open)).attr('r', 4).attr('fill', dash.colors[0]).attr('stroke', 'var(--color-panel)').attr('stroke-width', 2);
     ends.sort((a, b) => a.y - b.y);
-    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 14) ends[i].y = ends[i - 1].y + 14;
-    ends.forEach((e) => svg.append('text').attr('x', xr[1] + 6).attr('y', e.y).attr('dy', '0.32em').attr('font-size', 12)
-      .attr('fill', e.s.color).text(`${e.s.name} ${S(rows[rows.length - 1][e.s.key])}`));
-    // tooltip
-    const tip = d3.select(el).append('div').attr('class', 'tt-tip').style('display', 'none');
-    const rule = svg.append('line').attr('y1', 12).attr('y2', H - 28).attr('stroke', 'var(--cds-chart-axis)').style('display', 'none');
+    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 15) ends[i].y = ends[i - 1].y + 15;
+    ends.forEach((e) => svg.append('text').attr('x', xr[1] + 8).attr('y', e.y).attr('dy', '0.32em').attr('font-size', 12)
+      .attr('fill', e.s.key === 'cum_open' ? 'var(--color-fg)' : 'var(--color-fg-muted)').text(`${e.s.name} ${signed(last[e.s.key])}`));
+    const tip = d3.select(box).append('div').attr('class', 'tk-tip').style('display', 'none');
+    const rule = svg.append('line').attr('y1', top).attr('y2', H - bottom).attr('stroke', 'var(--cds-chart-axis)').style('display', 'none');
     svg.append('rect').attr('x', xr[0]).attr('y', 0).attr('width', xr[1] - xr[0]).attr('height', H).attr('fill', 'transparent')
       .on('pointermove', (ev) => {
         const [mx] = d3.pointer(ev);
         const t = x.invert(mx);
-        const i = d3.least(d3.range(rows.length), (k) => Math.abs(rows[k].d - t));
-        const r = rows[i];
+        const r = rows[d3.least(d3.range(rows.length), (k) => Math.abs(rows[k].d - t))];
         rule.style('display', null).attr('x1', x(r.d)).attr('x2', x(r.d));
-        tip.style('display', null).replaceChildren();
-        tip.append('div').attr('class', 'd').text(`${D(r.date)} · ${r.bets} plays`);
-        series.forEach((s) => { const ln = tip.append('div'); ln.append('span').attr('class', 'sw').style('background', s.color); ln.append('span').text(`${s.name}: ${S(r[s.key])}`); });
-        const box = tip.node().getBoundingClientRect(), host = el.getBoundingClientRect();
-        const px = Math.min(Math.max(0, (x(r.d) / W) * host.width + 10), host.width - box.width);
-        tip.style('left', `${px}px`).style('top', '8px');
+        tip.style('display', null).selectAll('*').remove();
+        tip.append('div').attr('class', 'd').text(`${shortDay(r.date)} · ${r.bets} play${r.bets === 1 ? '' : 's'}`);
+        series.forEach((s) => { const ln = tip.append('div'); ln.append('span').attr('class', 'sw').style('background', s.color); ln.append('span').text(`${s.name}: ${signed(r[s.key])}`); });
+        const host = box.getBoundingClientRect(), tb = tip.node().getBoundingClientRect();
+        tip.style('left', `${Math.min(Math.max(0, (x(r.d) / W) * host.width + 10), host.width - tb.width)}px`).style('top', '6px');
       })
       .on('pointerleave', () => { tip.style('display', 'none'); rule.style('display', 'none'); });
   });
