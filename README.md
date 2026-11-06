@@ -80,6 +80,21 @@ Caveats: opening lines carry low limits, SBR data has errors (a sign-convention 
 fake spread edge was found and fixed), and the most recent season in this data is 2021. The
 totals edge needs to be confirmed on 2022+ lines before you bet real money.
 
+## Confirmation on fresh seasons (ESPN odds, 2022–2026, ~28,000 games)
+
+`python -m cbb.espn_odds --seasons 2022-2026` downloads per-sportsbook lines (median across books;
+opening lines exist from 2024 on).
+
+| Market (prob ≥ 0.55) | Bets | Win % | p-value vs 52.4% |
+|---|---|---|---|
+| Spreads vs close | 15,366 | 51.1% | no edge |
+| Totals vs close | 12,750 | 51.8% | no edge |
+| Totals vs **open** (2024–26) | 7,638 | **54.1%** | 0.001 |
+
+Totals vs open by season: 2024 52.9%, 2025 54.3%, 2026 55.0%. The edge holds out of sample but is
+smaller than in 2014–21 (56.8%). It works against opening numbers only, so bets must be placed
+early, and the backtest uses the median opener across books, which is not a price you can always get.
+
 ## How to read a backtest honestly
 
 * Look at the **p-value vs 52.4%**. Fewer than ~1,000 bets at 54% is still within noise.

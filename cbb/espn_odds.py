@@ -98,6 +98,13 @@ def parse(game_id, d):
         if np.isnan(row["spread"]) and not np.isnan(_val(it, "spread")):
             # ESPN's top-level `spread` is from the home team's perspective
             row["spread"] = _val(it, "spread")
+        # Sanity filter: some entries carry prices (-110) in the line fields.
+        for c in ("spread", "spread_open"):
+            if not abs(row[c]) <= 50:
+                row[c] = np.nan
+        for c in ("total", "total_open"):
+            if not 95 <= row[c] <= 210:
+                row[c] = np.nan
         rows.append(row)
     return rows
 
@@ -112,9 +119,8 @@ def consolidate(book_rows):
     med = b.groupby("game_id")[["spread", "spread_open", "total", "total_open"]].median()
     out = best[["provider", "spread", "spread_open", "total", "total_open",
                 "home_price", "away_price", "over_price", "under_price"]].copy()
-    for c in ("spread", "total"):  # closing: preferred book, gaps filled from market median
-        out[c] = out[c].fillna(med[c])
-    for c in ("spread_open", "total_open"):  # opening numbers vary a lot by book -> use the median
+    # Lines = median across books (robust to one book's bad entry); prices from the preferred book.
+    for c in ("spread", "total", "spread_open", "total_open"):
         out[c] = med[c]
     out["n_books"] = b.groupby("game_id").size()
     return out.reset_index()
