@@ -86,9 +86,9 @@
 
 <div class="tk">
   <header class="tk-head" id="overview">
-    <div class="tk-eyebrow">Paper trading · College basketball totals</div>
-    <h1>CBB Totals Tracker</h1>
-    <p class="tk-sub">Opening totals · model confidence <b data-draw="h-cut">—</b> or higher · <b data-draw="h-unit">—</b> per play</p>
+    <div class="tk-eyebrow">Paper trading · College basketball totals &amp; spreads</div>
+    <h1>CBB Picks Tracker</h1>
+    <p class="tk-sub">Opening lines · top <b data-draw="h-max">—</b> plays a day · confidence <b data-draw="h-cut">—</b> or higher · <b data-draw="h-unit">—</b> per play</p>
   </header>
 
   <section class="tk-board" id="record" aria-label="Season record">
@@ -117,7 +117,7 @@
         <span>Record <b data-draw="y-record" data-source="lastday_summary" data-field="record">—</b></span>
         <span>Profit <b data-draw="y-usd" data-source="lastday_summary" data-field="profit_dollars">—</b></span>
       </div>
-      <table class="tk-rows" data-source="lastday" data-row-key="game_id">
+      <table class="tk-rows" data-source="lastday" data-row-key="key">
         <thead><tr>
           <th data-field="result_open"></th>
           <th data-field="matchup">Game</th>
@@ -137,7 +137,7 @@
       <span class="meta">Locked when logged each morning</span>
     </div>
     <div class="tk-table-card" data-wrap="plays">
-      <table class="tk-rows tk-plays" data-source="pending" data-row-key="game_id">
+      <table class="tk-rows tk-plays" data-source="pending" data-row-key="key">
         <thead><tr>
           <th class="tk-narrow-hide" data-field="date">Date</th>
           <th data-field="matchup">Game</th>
@@ -153,7 +153,7 @@
     <details class="tk-pass" id="passes">
       <summary>Other games with lines, where the model passes</summary>
       <div class="tk-pass-list">
-        <table class="tk-rows" data-source="passes" data-row-key="game_id">
+        <table class="tk-rows" data-source="passes" data-row-key="key">
           <thead><tr>
             <th data-field="matchup">Game</th>
             <th data-field="pick">Lean</th>
@@ -184,7 +184,7 @@
     <p class="tk-empty" data-empty="results" hidden>No graded plays yet. Results fill in the morning after each game.</p>
     <div class="tk-table-card" data-wrap="results">
       <div class="tk-scroll">
-        <table class="tk-rows" data-source="graded" data-row-key="game_id">
+        <table class="tk-rows" data-source="graded" data-row-key="key">
           <thead><tr>
             <th data-field="result_open"></th>
             <th class="tk-narrow-hide" data-field="date">Date</th>
@@ -203,20 +203,20 @@
   <details class="tk-method" id="method">
     <summary>How the picks are made</summary>
     <dl>
-      <dt>Model</dt><dd>Offense, defense and pace ratings for every team, refit before each game date, plus a machine-learning correction. It projects each game's total points.</dd>
-      <dt>Bet rule</dt><dd>Over or under the opening total when the model's calibrated confidence is at least <b data-draw="m-cut">—</b>. Everything else is a pass.</dd>
-      <dt>Backtest</dt><dd>This rule won about 55% of bets on 2024–26 opening totals and about 57% on 2014–21. Past results do not guarantee future ones.</dd>
+      <dt>Model</dt><dd>Offense, defense and pace ratings for every team, refit before each game date, plus a machine-learning correction. It projects each game's score: total points and the margin.</dd>
+      <dt>Bet rule</dt><dd>Over/under the opening total, or a side against the opening spread. Only bets with confidence of at least <b data-draw="m-cut">—</b> qualify, and only the 5 most confident are played each day. Everything else is a pass.</dd>
+      <dt>Backtest</dt><dd>Trained on 2014–21, tested on 2024–26: the top-5-a-day rule won 57.7% of 1,706 bets (57.7%, 58.8%, 56.7% by season). Past results do not guarantee future ones.</dd>
       <dt>Updates</dt><dd>Every morning at 8:41 AM Eastern: yesterday's games are graded and today's picks are posted.</dd>
-      <dt>Lines</dt><dd>ESPN's odds feed: the median opening total across sportsbooks, and the line posted when the pick was logged.</dd>
+      <dt>Lines</dt><dd>ESPN's odds feed: the median opening line across sportsbooks, and the line posted when the pick was logged.</dd>
       <dt>Profit</dt><dd>$20 per play at the posted price, or -110 when none was posted. The chart's second line grades against the number you could have bet that morning.</dd>
-      <dt>Spreads</dt><dd>Not played. The model showed no edge against the spread.</dd>
+      <dt>Spreads</dt><dd>Graded against the opening spread. Line and Model are from the picked team's side (−4.5 = favored by 4.5). The model shows an edge against opening spreads only, not closing ones. Spread confidence is rescaled to the totals scale so the two rank together.</dd>
     </dl>
   </details>
 </div>
 
 <script>
   // Fixed references (constants chosen with the user, not data).
-  window.TK = { MIN_PROB: 0.56, BREAKEVEN: 110 / 210, UNIT_DOLLARS: 20 };
+  window.TK = { MIN_PROB: 0.56, MAX_PLAYS: 5, BREAKEVEN: 110 / 210, UNIT_DOLLARS: 20 };
   const isPlay = (r) => r.play === true || r.play === 'True' || r.play === 'true';
   window.TK.isPlay = isPlay;
 
@@ -267,7 +267,7 @@
     fn: (picks) => picks
       .filter((r) => r.status === 'pending' && (r.play === true || r.play === 'True' || r.play === 'true'))
       .map((r) => ({
-        game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
+        key: String(r.key), market: r.market, game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
         open_total: r.open_total, line_at_pick: r.line_at_pick, model_total: r.model_total, confidence: r.prob,
       }))
       .sort((a, b) => d3.ascending(a.date, b.date) || d3.descending(a.confidence, b.confidence)),
@@ -279,7 +279,7 @@
     inputs: ['picks'],
     fn: (picks) => picks
       .filter((r) => r.status === 'pending' && !(r.play === true || r.play === 'True' || r.play === 'true'))
-      .map((r) => ({ game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
+      .map((r) => ({ key: String(r.key), market: r.market, game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
                      open_total: r.open_total, model_total: r.model_total, confidence: r.prob }))
       .sort((a, b) => d3.ascending(a.date, b.date) || d3.descending(a.confidence, b.confidence)),
   });
@@ -292,8 +292,8 @@
       const done = picks.filter((r) => (r.play === true || r.play === 'True' || r.play === 'true') && r.status === 'final');
       const last = d3.max(done, (r) => r.game_date);
       return done.filter((r) => r.game_date === last)
-        .map((r) => ({ game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
-                       open_total: r.open_total, final_total: r.final_total, result_open: r.result_open,
+        .map((r) => ({ key: String(r.key), market: r.market, game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
+                       open_total: r.open_total, final: r.final, final_total: r.final_total, result_open: r.result_open,
                        dollars: Math.round((Number(r.units_open) || 0) * 20 * 100) / 100 }))
         .sort((a, b) => d3.ascending(a.result_open, b.result_open) || d3.ascending(a.matchup, b.matchup));
     },
@@ -318,8 +318,8 @@
     inputs: ['picks'],
     fn: (picks) => picks
       .filter((r) => (r.play === true || r.play === 'True' || r.play === 'true') && r.status === 'final')
-      .map((r) => ({ game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
-                     open_total: r.open_total, final_total: r.final_total, result_open: r.result_open,
+      .map((r) => ({ key: String(r.key), market: r.market, game_id: String(r.game_id), date: r.game_date, matchup: `${r.away} at ${r.home}`, pick: r.pick,
+                     open_total: r.open_total, final: r.final, final_total: r.final_total, result_open: r.result_open,
                      dollars: Math.round((Number(r.units_open) || 0) * 20 * 100) / 100 }))
       .sort((a, b) => d3.descending(a.date, b.date)),
   });
@@ -333,7 +333,9 @@
   const usd = (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + '$' + d3.format(',.2f')(Math.abs(v));
   const tone = (v) => (v > 0 ? 'pos' : v < 0 ? 'neg' : '');
   const one = (id) => { const g = dash.data(id); return g.status === 'ok' && g.data.length ? g.data[0] : null; };
-  const pickColor = (p) => (p === 'OVER' ? dash.colors[1] : dash.colors[0]);
+  const pickColor = (p) => (p === 'OVER' ? dash.colors[1] : p === 'UNDER' ? dash.colors[0] : dash.colors[2]);
+  const lineFmt = (r, v) => (v == null || v === '' ? '' : r.market === 'spread' ? d3.format('+.1f')(v).replace('-', '−') : f1(v));
+  const finalFmt = (r) => (r.final == null || r.final === '' ? (r.final_total == null ? '' : String(r.final_total)) : String(r.final).replace(/\.0$/, '').replace('-', '–'));
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
   const setBig = (node, text, cls) => { node.textContent = text; node.classList.remove('pos', 'neg'); if (cls) node.classList.add(cls); };
 
@@ -355,6 +357,7 @@
   });
 
   dash.draw('h-cut', (n) => { n.textContent = pct0(window.TK.MIN_PROB); });
+  dash.draw('h-max', (n) => { n.textContent = String(window.TK.MAX_PLAYS); });
   dash.draw('h-unit', (n) => { n.textContent = '$' + window.TK.UNIT_DOLLARS; });
   dash.draw('m-cut', (n) => { n.textContent = pct0(window.TK.MIN_PROB); });
   dash.draw('b-record', (n) => { const s = one('summary'); n.textContent = s ? s.record : '—'; });
@@ -369,12 +372,12 @@
     const g = dash.data('pending');
     const rows = g.status === 'ok' ? g.data : [];
     tb.replaceChildren(...rows.map((r) => {
-      const tr = el('tr'); tr.dataset.key = r.game_id;
+      const tr = el('tr'); tr.dataset.key = r.key;
       tr.appendChild(el('td', 'tk-narrow-hide', shortDay(r.date)));
       tr.appendChild(el('td', 'game', r.matchup));
       const pk = el('td'); const chip = el('span', 'tk-pick', r.pick); chip.style.setProperty('--pick', pickColor(r.pick)); pk.appendChild(chip); tr.appendChild(pk);
-      tr.appendChild(el('td', 'num', f1(r.open_total)));
-      tr.appendChild(el('td', 'num', f1(r.model_total)));
+      tr.appendChild(el('td', 'num', lineFmt(r, r.open_total)));
+      tr.appendChild(el('td', 'num', lineFmt(r, r.model_total)));
       const c = el('td', 'num'); const wrap = el('span', 'tk-confcell'); const bar = el('span', 'tk-confbar'); const fill = el('i');
       fill.style.width = `${Math.max(0, Math.min(1, (r.confidence - 0.5) / 0.25)) * 100}%`; bar.appendChild(fill);
       wrap.append(bar, el('span', null, pct0(r.confidence))); c.appendChild(wrap); tr.appendChild(c);
@@ -390,12 +393,12 @@
     const g = dash.data('lastday');
     const rows = g.status === 'ok' ? g.data : [];
     tb.replaceChildren(...rows.map((r) => {
-      const tr = el('tr'); tr.dataset.key = r.game_id;
+      const tr = el('tr'); tr.dataset.key = r.key;
       tr.appendChild(badge(r.result_open));
       tr.appendChild(el('td', 'game', r.matchup));
       const pk = el('td'); const chip = el('span', 'tk-pick', r.pick); chip.style.setProperty('--pick', pickColor(r.pick)); pk.appendChild(chip); tr.appendChild(pk);
-      tr.appendChild(el('td', 'num', f1(r.open_total)));
-      tr.appendChild(el('td', 'num', r.final_total == null ? '' : String(r.final_total)));
+      tr.appendChild(el('td', 'num', lineFmt(r, r.open_total)));
+      tr.appendChild(el('td', 'num', finalFmt(r)));
       tr.appendChild(el('td', 'num tk-u ' + tone(r.dollars), usd(r.dollars)));
       return tr;
     }));
@@ -405,11 +408,11 @@
     const g = dash.data('passes');
     const rows = g.status === 'ok' ? g.data : [];
     tb.replaceChildren(...rows.map((r) => {
-      const tr = el('tr'); tr.dataset.key = r.game_id;
+      const tr = el('tr'); tr.dataset.key = r.key;
       const game = el('td', 'game', r.matchup); tr.appendChild(game);
       tr.appendChild(el('td', 'pk', r.pick));
-      tr.appendChild(el('td', 'num', f1(r.open_total)));
-      tr.appendChild(el('td', 'num', f1(r.model_total)));
+      tr.appendChild(el('td', 'num', lineFmt(r, r.open_total)));
+      tr.appendChild(el('td', 'num', lineFmt(r, r.model_total)));
       tr.appendChild(el('td', 'num', pct0(r.confidence)));
       return tr;
     }));
@@ -419,13 +422,13 @@
     const g = dash.data('graded');
     const rows = g.status === 'ok' ? g.data : [];
     tb.replaceChildren(...rows.map((r) => {
-      const tr = el('tr'); tr.dataset.key = r.game_id;
+      const tr = el('tr'); tr.dataset.key = r.key;
       const b = el('td'); b.appendChild(el('span', 'tk-badge ' + (r.result_open || 'P'), r.result_open || 'P')); tr.appendChild(b);
       tr.appendChild(el('td', 'tk-narrow-hide', shortDay(r.date)));
       tr.appendChild(el('td', 'game', r.matchup));
       const pk2 = el('td'); const chip2 = el('span', 'tk-pick', r.pick); chip2.style.setProperty('--pick', pickColor(r.pick)); pk2.appendChild(chip2); tr.appendChild(pk2);
-      tr.appendChild(el('td', 'num', f1(r.open_total)));
-      tr.appendChild(el('td', 'num', r.final_total == null ? '' : String(r.final_total)));
+      tr.appendChild(el('td', 'num', lineFmt(r, r.open_total)));
+      tr.appendChild(el('td', 'num', finalFmt(r)));
       tr.appendChild(el('td', 'num tk-u ' + tone(r.dollars), usd(r.dollars)));
       return tr;
     }));

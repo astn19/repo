@@ -139,3 +139,11 @@ ratings (cutoff = last season's 25th-best team). Totals with both teams top 25 h
 ## Data
 
 ESPN data via the [sportsdataverse / hoopR](https://github.com/sportsdataverse/hoopR-mbb-data) releases.
+
+## Spreads vs opening lines + top-5 rule (Nov 2026)
+
+Spreads showed no edge against **closing** lines, but against **opening** spreads a calibrated
+logistic (`cbb/calibrate.py`, fit 2014-21) wins 55.4% of 1,721 bets on 2024-26 at raw prob >= 0.53.
+Paper trading now ranks totals and spreads together (spread confidence doubled around 50% to match
+the totals scale) and plays at most 5 a day with confidence >= 0.56.
+Backtest of that rule on 2024-26: 57.7% of 1,706 bets (57.7% / 58.8% / 56.7% by season).
