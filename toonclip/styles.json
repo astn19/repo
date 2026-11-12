@@ -1,0 +1,59 @@
+{
+  "_help": "Each style = an art model + the words that describe the look. 'models' is tried in order (first one that loads wins). A model can be a Hugging Face repo id OR the path to a .safetensors checkpoint you downloaded (any Stable Diffusion 1.5 checkpoint works). Add your own styles by copying a block.",
+
+  "Anime": {
+    "models": ["Meina/MeinaMix_V11", "gsdf/Counterfeit-V2.5", "Lykon/dreamshaper-8"],
+    "prompt": "anime screencap, anime style, cel shading, flat colors, clean lineart, vibrant colors, masterpiece, best quality",
+    "negative": "photo, photorealistic, realistic, 3d render"
+  },
+  "Anime Film (painterly)": {
+    "models": ["nitrosocke/Ghibli-Diffusion", "Lykon/dreamshaper-8"],
+    "prompt": "ghibli style, hand painted anime film, soft painted background, clean lineart, warm colors",
+    "negative": "photo, photorealistic, 3d render"
+  },
+  "Comic Book": {
+    "models": ["ogkalu/Comic-Diffusion", "Lykon/dreamshaper-8"],
+    "prompt": "charliebo artstyle, comic book illustration, bold black ink outlines, flat saturated colors, halftone shading, dynamic",
+    "negative": "photo, photorealistic, 3d render, soft, painterly"
+  },
+  "Graphic Novel": {
+    "models": ["ogkalu/Comic-Diffusion", "Lykon/dreamshaper-8"],
+    "prompt": "marioalberti artstyle, graphic novel illustration, heavy inks, dramatic shadows, detailed linework",
+    "negative": "photo, photorealistic, 3d render"
+  },
+  "Pop Comic Animation": {
+    "models": ["nitrosocke/spider-verse-diffusion", "ogkalu/Comic-Diffusion"],
+    "prompt": "spiderverse style, stylized comic animation, halftone dots, bold colors, ink lines",
+    "negative": "photo, photorealistic"
+  },
+  "3D Cartoon": {
+    "models": ["nitrosocke/mo-di-diffusion", "Lykon/dreamshaper-8"],
+    "prompt": "modern disney style, 3d animated movie, cute stylized characters, smooth shading, big expressive eyes",
+    "negative": "photo, photorealistic, anime, sketch"
+  },
+  "Painted Animation": {
+    "models": ["nitrosocke/Arcane-Diffusion", "Lykon/dreamshaper-8"],
+    "prompt": "arcane style, painterly animation, textured brush strokes, dramatic lighting",
+    "negative": "photo, photorealistic"
+  },
+  "Ink Punk": {
+    "models": ["Envvi/Inkpunk-Diffusion", "Lykon/dreamshaper-8"],
+    "prompt": "nvinkpunk, ink illustration, splashes of color, bold graphic shapes",
+    "negative": "photo, photorealistic, 3d render"
+  },
+  "Cartoon Illustration": {
+    "models": ["Lykon/dreamshaper-8"],
+    "prompt": "cartoon illustration, flat vector art, bold outlines, simple shapes, bright colors",
+    "negative": "photo, photorealistic, 3d render, detailed texture"
+  },
+  "Watercolor": {
+    "models": ["Lykon/dreamshaper-8"],
+    "prompt": "watercolor painting, soft washes of color, paper texture, loose brushwork, illustration",
+    "negative": "photo, photorealistic, 3d render"
+  },
+  "Pixel Art": {
+    "models": ["Lykon/dreamshaper-8"],
+    "prompt": "pixel art, 16-bit retro video game, limited color palette, crisp pixels",
+    "negative": "photo, photorealistic, blurry, smooth"
+  }
+}

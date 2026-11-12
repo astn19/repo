@@ -1,0 +1,13 @@
+# PyTorch itself is installed by install.bat / install.sh (it needs the NVIDIA build).
+diffusers>=0.32
+transformers>=4.44
+accelerate
+peft
+safetensors
+huggingface_hub
+opencv-python-headless
+numpy
+pillow
+gradio>=5
+imageio-ffmpeg
+yt-dlp
